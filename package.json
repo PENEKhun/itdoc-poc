@@ -1,0 +1,55 @@
+{
+  "name": "it-doc-poc",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "prettify": "prettier --write *.js **/*.js",
+    "dev": "cross-env NODE_ENV=test nodemon server.js",
+    "test": "cross-env NODE_ENV=test node --experimental-vm-modules node_modules/jest/bin/jest.js",
+    "test:ci": "cross-env NODE_ENV=ci node --experimental-vm-modules node_modules/jest/bin/jest.js",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@eslint/js": "^9.16.0",
+    "@testcontainers/mysql": "^10.16.0",
+    "@types/jest": "^29.5.14",
+    "eslint": "^9.16.0",
+    "eslint-plugin-import": "^2.31.0",
+    "eslint-plugin-jest": "^28.9.0",
+    "eslint-plugin-unicorn": "^56.0.1",
+    "globals": "^15.13.0",
+    "husky": "^9.1.7",
+    "jest": "^29.7.0",
+    "lint-staged": "^15.2.10",
+    "mockdate": "^3.0.5",
+    "nodemon": "^3.1.7",
+    "prettier": "^3.4.2",
+    "supertest": "^7.0.0",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1"
+  },
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "cls-rtracer": "^2.6.3",
+    "cross-env": "^7.0.3",
+    "dayjs": "^1.11.13",
+    "express": "^4.21.1",
+    "express-async-errors": "^3.1.1",
+    "jsonwebtoken": "^9.0.2",
+    "knex": "^3.1.0",
+    "mysql2": "^3.11.5",
+    "objection": "^3.1.5",
+    "passport": "^0.7.0",
+    "passport-jwt": "^4.0.1",
+    "winston": "^3.17.0"
+  },
+  "lint-staged": {
+    "**/*": "prettier --write --ignore-unknown"
+  }
+}

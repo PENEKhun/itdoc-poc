@@ -1,0 +1,16 @@
+{
+  "verbose": true,
+  "collectCoverage": true,
+  "projects": [
+    {
+      "displayName": "통합 테스트",
+      "testMatch": ["**/tests/integration-test/api/aa.test.js"],
+      "globalSetup": "./tests/integration-test/database.setup.js",
+      "globalTeardown": "./tests/integration-test/database.teardown.js",
+      "testEnvironment": "node"
+    }
+  ],
+  "maxWorkers": 1,
+  "maxConcurrency": 1,
+  "_comment": "TODO: 테스트 멱등성을 유지하기 위해, 테스트를 하나씩만 실행합니다."
+}
