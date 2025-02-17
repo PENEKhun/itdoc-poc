@@ -52,7 +52,7 @@ export const errorDefinitions = deepFreeze({
       message: "IDC 서비스를 찾을 수 없습니다",
     },
     INVALID_STATUS_CHANGE: {
-      status: 400,
+      status: 409, // 상태코드의 경우 401등 default 로 설정하기 좋게 상태코드에 관한 설명을 -> constant map 형태로 만들고 유저가 서비스에 맞게 매핑하는 형식이 좋을듯  
       message: "유효하지 않은 상태 전환입니다",
     },
   },

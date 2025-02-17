@@ -4,6 +4,7 @@ import UserAccount from "../models/user-account.js";
  * @param { import("knex").Knex } knex
  */
 export async function seed(knex) {
+  // 현재는 sql 뿐이지만 nosql도 염두해서 설계하는게 좋을듯
   await knex(UserAccount.tableName).insert([
     {
       seqno: 1,

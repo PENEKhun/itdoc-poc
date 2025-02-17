@@ -68,7 +68,9 @@ authRoutes.post("/users/login", async (req, res) => {
   const { username, password } = req.body;
 
   if (!username || !password) {
-    throw new PCloudError(errorDefinitions.AUTH.LOGIN_INVALID_BODY);
+    throw new PCloudError(errorDefinitions.AUTH.LOGIN_INVALID_BODY); 
+    // 바로 에러 반환이 어색함 -> status code 변경해서 사용자에게 response 주거나 로그 등 추가 로직이 필 
+
   }
 
   const user = await userRepository.findUserByUsername(username);

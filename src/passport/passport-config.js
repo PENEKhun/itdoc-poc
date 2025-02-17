@@ -9,7 +9,7 @@ const jwtOptions = {
   ignoreExpiration: true,
   secretOrKey: process.env.JWT_SECRET,
 };
-
+// JWT 만료일 관련해서 상수화 하는것도 좋을듯 -> 발전되면 jwt 뿐만 아니라 session까지도
 const JWTVerify = async (jwtPayload, done) => {
   if (Date.now() > jwtPayload.exp * 1000) {
     return done(new PCloudError(errorDefinitions.AUTH.EXPIRED_TOKEN), false);

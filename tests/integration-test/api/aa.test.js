@@ -2,9 +2,9 @@ import { describeAPI, field, header, itDoc } from "../../../itdoc/Itdoc.js";
 import { HTTPStatus } from "../../../itdoc/HttpStatus.js";
 
 describeAPI("POST", "/api/v1/users/login", {
-  name: "사용자 로그인",
+  name: "사용자 로그인", // name -> title
   tag: "auth",
-  description: "아이디와 패스워드로 JWT 인증 토큰을 발급합니다.",
+  description: "아이디와 패스워드로 JWT 인증 토큰을 발급합니다.", // description -> desc
 }, (apiDoc) => {
   itDoc("일치하는 아이디와 패스워드가 있다면 토큰을 발행한다.", async () => {
     await apiDoc.test()
@@ -20,7 +20,7 @@ describeAPI("POST", "/api/v1/users/login", {
             if (typeof value !== "string" || value.length === 0) {
               throw new Error("Token is invalid or empty");
             }
-            // JWT 포맷 (간단하게 검사)
+            // JWT 포맷 (간단하게 검사) 이런거 검사하는거 라이브러리 이용해서 전번, jwt, 이메일 형식 등 쉽게 유틸함수에서 꺼내서 -> 검사하기 쉽게
             const jwtRegex = /^eyJ[\w-]+\.[\w-]+\.[\w-]+$/;
             if (!jwtRegex.test(value)) {
               throw new Error("Token does not match expected JWT format");
