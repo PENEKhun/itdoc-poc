@@ -54,3 +54,80 @@ describeAPI(
     });
   },
 );
+
+describeAPI(
+  HttpMethod.GET,
+  '/users/{userId}',
+  {
+    name: '사용자 조회 API',
+    tag: 'User',
+    summary: '사용자 ID를 받아 사용자 정보를 반환합니다.',
+  },
+  targetApp,
+  (apiDoc) => {
+    itDoc('유효한 사용자 ID가 주어지면 200 응답을 반환한다.', async () => {
+      await apiDoc
+        .test()
+        .withPathParams({
+          userId: field('유효한 사용자 ID', 'penek'),
+        })
+        .expectStatus(HttpStatus.OK)
+        .expectResponseBody({
+          userId: 'penek',
+          username: 'hun',
+          email: 'penekhun@gmail.com',
+          friends: ['zagabi', 'json']
+        });
+    });
+
+    itDoc('존재하지 않는 사용자 ID가 주어지면 404 응답을 반환한다.', async () => {
+      await apiDoc
+        .test()
+        .withPathParams({
+          userId: field('존재하지 않는 사용자 ID', 'invalid-user-id'),
+        })
+        .expectStatus(HttpStatus.NOT_FOUND);
+    });
+  }
+);
+
+describeAPI(
+  HttpMethod.DELETE,
+  '/users/{userId}/friends/{friendId}',
+  {
+    name: '특정 사용자의 특정 친구 삭제 API',
+    tag: 'User',
+    summary: '특정 사용자의 친구를 삭제합니다.',
+  },
+  targetApp,
+  (apiDoc) => {
+    itDoc('존재 하지 않는 사용자 ID가 주어지면 400 응답을 반환한다.', async () => {
+      await apiDoc
+        .test()
+        .withPathParams({
+          userId: field('존재하지 않는 사용자 ID', 'invalid-user-id'),
+        })
+        .expectStatus(HttpStatus.BAD_REQUEST);
+    });
+
+    itDoc('존재하지 않는 친구 ID가 주어지면 404 응답을 반환한다.', async () => {
+      await apiDoc
+        .test()
+        .withPathParams({
+          userId: field('유효한 사용자 ID', 'penek'),
+          friendId: field('존재하지 않는 친구 ID', 'invalid-friend-id'),
+        })
+        .expectStatus(HttpStatus.NOT_FOUND);
+    });
+
+    itDoc('유효한 사용자 ID와 친구 ID가 주어지면 정상 삭제된다.', async () => {
+      await apiDoc
+        .test()
+        .withPathParams({
+          userId: field('유효한 사용자 ID', 'penek'),
+          friendId: field('유효한 친구 ID', 'zagabi'),
+        })
+        .expectStatus(HttpStatus.NO_CONTENT);
+    });
+  }
+)

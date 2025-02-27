@@ -83,7 +83,8 @@ const validateResponse = (
  * API 테스트 설정 인터페이스
  */
 export interface APITestConfig {
-  pathParams?: Record<string, string>;
+  // pathParams 타입을 DSLField를 사용하도록 변경합니다.
+  pathParams?: Record<string, DSLField<any>>;
   queryParams?: Record<string, DSLField<any>>;
   requestBody?: Record<string, DSLField<any>>;
   requestHeaders?: Record<string, DSLField<any>>;
@@ -97,9 +98,9 @@ export interface APITestConfig {
  */
 export class APITestBuilder {
   private config: APITestConfig;
-  private method: HttpMethod;
-  private url: string;
-  private app: any;
+  private readonly method: HttpMethod;
+  private readonly url: string;
+  private readonly app: any;
 
   constructor(defaults: APITestConfig = {}, method: HttpMethod, url: string, app: any) {
     this.config = { ...defaults };
@@ -108,7 +109,8 @@ export class APITestBuilder {
     this.app = app;
   }
 
-  withPathParams(params: Record<string, string>): this {
+  // DSLField를 사용하는 pathParams 메서드
+  withPathParams(params: Record<string, DSLField<any>>): this {
     this.config.pathParams = params;
     return this;
   }
@@ -148,10 +150,15 @@ export class APITestBuilder {
   }
 
   async runTest(): Promise<Response> {
+    if (!this.config.expectedStatus) {
+      throw new Error('Expected status is required');
+    }
+
+    // pathParams에서 DSLField의 example 값을 사용하여 URL 치환
     let finalUrl = this.url;
     if (this.config.pathParams) {
-      for (const [key, value] of Object.entries(this.config.pathParams)) {
-        finalUrl = finalUrl.replace(`{${key}}`, encodeURIComponent(value));
+      for (const [key, fieldObj] of Object.entries(this.config.pathParams)) {
+        finalUrl = finalUrl.replace(`{${key}}`, encodeURIComponent(fieldObj.example));
       }
     }
 
@@ -193,11 +200,10 @@ export class APITestBuilder {
       });
     }
 
+    console.log(JSON.stringify(req, null, 2));
     try {
       const res = await req;
       if (this.config.prettyPrint) {
-        // TODO: 아래 로그 출력을 할까?
-        //console.log(JSON.stringify(req, null, 2));
         console.log("=== API TEST REQUEST ===");
         console.log("Method:", this.method);
         console.log("URL:", finalUrl);

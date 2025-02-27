@@ -29,4 +29,33 @@ app.post('/signup', function(req, res) {
   return res.status(201).json( );
 });
 
+app.get('/users/:userId', (req, res) => {
+  const { userId } = req.params;
+
+  if (userId !== 'penek') {
+    return res.status(404).json();
+  }
+
+  return res.status(200).json({
+    userId,
+    username: 'hun',
+    email: 'penekhun@gmail.com',
+    friends: ['zagabi', 'json'],
+  });
+});
+
+app.delete('/users/:userId/friends/:friendName', (req, res) => {
+  const { userId, friendName } = req.params;
+
+  if (userId !== 'penek') {
+    return res.status(400).json();
+  }
+
+  if (friendName !== 'zagabi') {
+    return res.status(404).json();
+  }
+
+  return res.status(204).json();
+});
+
 export default app;
