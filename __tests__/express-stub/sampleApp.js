@@ -1,5 +1,8 @@
-const express = require('express');
+import express from 'express';
+
 const app = express();
+
+app.use(express.json());
 
 app.post('/signup', function(req, res) {
   const { username, password } = req.body;
@@ -23,7 +26,7 @@ app.post('/signup', function(req, res) {
     });
   }
 
-  return res.status(201);
+  return res.status(201).json( );
 });
 
 export default app;

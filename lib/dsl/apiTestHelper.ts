@@ -1,5 +1,7 @@
 import { HttpMethod } from './enums/HttpMethod.js';
 import { HttpStatus } from './enums/HttpStatus.js';
+import { SuperTest, Test } from 'supertest';
+import supertest from 'supertest';
 
 /**
  * DSL Field 인터페이스
@@ -44,7 +46,6 @@ const validateResponse = (
     const expectedVal = expectedObj[key];
     const actualVal = actualObj ? actualObj[key] : undefined;
 
-    // DSL field 객체인지 ("example" 프로퍼티가 있다면) 확인
     if (
       expectedVal &&
       typeof expectedVal === 'object' &&
@@ -62,7 +63,6 @@ const validateResponse = (
         }
       }
     } else if (expectedVal && typeof expectedVal === 'object') {
-      // 중첩 객체인 경우 재귀 호출
       if (typeof actualVal !== 'object') {
         throw new Error(
           `Expected response body[${currentPath}] to be an object but got ${actualVal}`,
@@ -70,7 +70,6 @@ const validateResponse = (
       }
       validateResponse(expectedVal, actualVal, currentPath);
     } else {
-      // 원시 값 비교
       if (actualVal !== expectedVal) {
         throw new Error(
           `Expected response body[${currentPath}] to be ${expectedVal} but got ${actualVal}`,
@@ -100,13 +99,141 @@ export class APITestBuilder {
   private config: APITestConfig;
   private method: HttpMethod;
   private url: string;
+  private app: any;
 
-  constructor(defaults: APITestConfig = {}, method: HttpMethod, url: string) {
+  constructor(defaults: APITestConfig = {}, method: HttpMethod, url: string, app: any) {
     this.config = { ...defaults };
     this.method = method;
     this.url = url;
+    this.app = app;
+  }
 
-    console.log(method + ' ' + url);
+  withPathParams(params: Record<string, string>): this {
+    this.config.pathParams = params;
+    return this;
+  }
+
+  withQueryParams(params: Record<string, DSLField<any>>): this {
+    this.config.queryParams = params;
+    return this;
+  }
+
+  withRequestBody(body: Record<string, DSLField<any>>): this {
+    this.config.requestBody = body;
+    return this;
+  }
+
+  withoutHeader(headerName: string): this {
+    if (this.config.requestHeaders && this.config.requestHeaders[headerName]) {
+      delete this.config.requestHeaders[headerName];
+    } else {
+      console.warn(`Header "${headerName}" not found`);
+    }
+    return this;
+  }
+
+  expectStatus(status: HttpStatus | number): this {
+    this.config.expectedStatus = status;
+    return this;
+  }
+
+  expectResponseBody(body: Record<string, any>): this {
+    this.config.expectedResponseBody = body;
+    return this;
+  }
+
+  withPrettyPrint(): this {
+    this.config.prettyPrint = true;
+    return this;
+  }
+
+  async runTest(): Promise<Response> {
+    let finalUrl = this.url;
+    if (this.config.pathParams) {
+      for (const [key, value] of Object.entries(this.config.pathParams)) {
+        finalUrl = finalUrl.replace(`{${key}}`, encodeURIComponent(value));
+      }
+    }
+
+    const requestInstance = supertest(this.app);
+    let req = requestInstance[this.method.toLowerCase()](finalUrl);
+
+    if (this.config.requestHeaders) {
+      for (const [key, headerObj] of Object.entries(this.config.requestHeaders)) {
+        req = req.set(key, headerObj.example as string);
+      }
+    }
+
+    if (this.config.queryParams) {
+      const queryParams: Record<string, any> = {};
+      for (const [key, fieldObj] of Object.entries(this.config.queryParams)) {
+        queryParams[key] = fieldObj.example;
+      }
+      req = req.query(queryParams);
+    }
+
+    if (this.config.requestBody) {
+      const body: Record<string, any> = {};
+      for (const [key, fieldObj] of Object.entries(this.config.requestBody)) {
+        body[key] = fieldObj.example;
+      }
+      req = req.send(body);
+    }
+
+    if (this.config.expectedStatus) {
+      req = req.expect(this.config.expectedStatus);
+    }
+
+    if (this.config.expectedResponseBody) {
+      req = req.expect((res: Response) => {
+        validateResponse(
+          this.config.expectedResponseBody as Record<string, any>,
+          res.body
+        );
+      });
+    }
+
+    try {
+      const res = await req;
+      if (this.config.prettyPrint) {
+        // TODO: 아래 로그 출력을 할까?
+        //console.log(JSON.stringify(req, null, 2));
+        console.log("=== API TEST REQUEST ===");
+        console.log("Method:", this.method);
+        console.log("URL:", finalUrl);
+        console.log("Headers:", JSON.stringify(this.config.requestHeaders, null, 2));
+        console.log("Query Params:", JSON.stringify(this.config.queryParams, null, 2));
+        console.log("Request Body:", JSON.stringify(this.config.requestBody, null, 2));
+        console.log("=== API TEST RESPONSE ===");
+        console.log("Status:", res.status);
+        console.log("Response Body:", JSON.stringify(res.body, null, 2));
+      }
+      return res;
+    } catch (error: any) {
+      if (this.config.prettyPrint) {
+        console.log("=== API TEST REQUEST (on Error) ===");
+        console.log("Method:", this.method);
+        console.log("URL:", finalUrl);
+        console.log("Headers:", JSON.stringify(this.config.requestHeaders, null, 2));
+        console.log("Query Params:", JSON.stringify(this.config.queryParams, null, 2));
+        console.log("Request Body:", JSON.stringify(this.config.requestBody, null, 2));
+        if (error.response) {
+          console.log("=== API TEST RESPONSE (Error) ===");
+          console.log("Status:", error.response.status);
+          console.log("Response Body:", JSON.stringify(error.response.body, null, 2));
+        } else {
+          console.log("Error Message:", error.message);
+        }
+      }
+      throw error;
+    }
+  }
+
+  then<TResult1 = Response, TResult2 = never>(
+    resolve?: ((value: Response) => TResult1 | PromiseLike<TResult1>) | null,
+    reject?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null
+  ): Promise<TResult1 | TResult2> {
+    return this.runTest().then(resolve, reject);
   }
 }
 
@@ -127,14 +254,16 @@ export class APIDoc {
   method: HttpMethod;
   url: string;
   options: APIDocOptions;
+  app: any;
 
-  constructor(method: HttpMethod, url: string, options: APIDocOptions) {
+  constructor(method: HttpMethod, url: string, options: APIDocOptions, app: any) {
     this.method = method;
     this.url = url;
     this.options = options;
+    this.app = app;
   }
 
   test(): APITestBuilder {
-    return new APITestBuilder(this.options.defaults, this.method, this.url);
+    return new APITestBuilder(this.options.defaults, this.method, this.url, this.app);
   }
 }

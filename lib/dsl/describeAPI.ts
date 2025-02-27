@@ -7,12 +7,14 @@ import { describeCommon } from './adapters/index.js';
  * @param method HTTP 메서드
  * @param url API URL
  * @param options API 문서 옵션
+ * @param app Express 앱 인스턴스 (supertest 생성에 사용)
  * @param callback API 테스트 함수
  */
 export const describeAPI = (
   method: HttpMethod,
   url: string,
   options: APIDocOptions,
+  app: any,
   callback: (apiDoc: APIDoc) => void,
 ): void => {
   if (!options.name) {
@@ -23,12 +25,16 @@ export const describeAPI = (
     throw new Error('API URL은 /로 시작해야 합니다.');
   }
 
+  if (!app) {
+    throw new Error('Express 앱 인스턴스가 필요합니다.');
+  }
+
   if (!callback) {
     throw new Error('API 테스트 함수가 필요합니다.');
   }
 
   describeCommon(`${options.name} | [${method}] ${url}`, () => {
-    const apiDoc = new APIDoc(method, url, options);
+    const apiDoc = new APIDoc(method, url, options, app);
     callback(apiDoc);
   });
 };
