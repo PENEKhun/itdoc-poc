@@ -200,7 +200,7 @@ export class APITestBuilder {
       });
     }
 
-    console.log(JSON.stringify(req, null, 2));
+    // console.log(JSON.stringify(req, null, 2));
     try {
       const res = await req;
       if (this.config.prettyPrint) {

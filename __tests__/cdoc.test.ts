@@ -1,9 +1,9 @@
-import { describeAPI } from '../lib/dsl/describeAPI';
+import { describeAPI } from '../lib/dsl/describeAPI.js';
 import app from './express-stub/sampleApp.js';
-import { HttpMethod } from '../lib/dsl/enums/HttpMethod';
-import { itDoc } from '../lib/dsl/itDoc';
-import { field } from '../lib/dsl/apiTestHelper';
-import { HttpStatus } from '../lib/dsl/enums/HttpStatus';
+import { HttpMethod } from '../lib/dsl/enums/HttpMethod.js';
+import { itDoc } from '../lib/dsl/itDoc.js';
+import { field } from '../lib/dsl/apiTestHelper.js';
+import { HttpStatus } from '../lib/dsl/enums/HttpStatus.js';
 
 const targetApp = app;
 
