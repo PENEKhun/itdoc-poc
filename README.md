@@ -1,5 +1,5 @@
 # chilldoc poc
-- [유스케이스](/blob/main/__tests__/cdoc.test.ts)
+- [유스케이스](https://github.com/PENEKhun/itdoc-poc/blob/main/__tests__/cdoc.test.ts)
 - [poc](https://github.com/PENEKhun/itdoc-poc/tree/main/lib)
 
 # TODO
