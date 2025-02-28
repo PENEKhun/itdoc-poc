@@ -26,7 +26,7 @@ app.post('/signup', function(req, res) {
     });
   }
 
-  return res.status(201).json( );
+  return res.status(201).json();
 });
 
 app.get('/users/:userId', (req, res) => {

@@ -1,4 +1,4 @@
-import { TestFramework } from './TestFramework';
+import { TestFramework } from './TestFramework.js';
 
 /**
  * 공통 DSL 인터페이스를 정의합니다.

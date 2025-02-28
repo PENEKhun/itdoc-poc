@@ -5,8 +5,8 @@
 ## test?
 
 ```bash
-# 유스케이스만 테스트하기 위해서 cdoc.test.ts 지정
-mocha --loader=ts-node/esm __tests__/cdoc.test.ts
+# 유스케이스만 테스트하기 위해서 expressApp.test.ts 지정
+mocha --loader=ts-node/esm __tests__/expressApp.test.ts
 ```
 
 <img width="659" alt="image" src="https://github.com/user-attachments/assets/06c266e4-d308-4cb4-83b1-afa93a6ef9fa" />  
@@ -15,6 +15,7 @@ mocha --loader=ts-node/esm __tests__/cdoc.test.ts
 
 - 테스트 프레임워크 호환성
     - [x] 사용자가 mocha 환경일 때
+      - ` npm --prefix ./e2e/mocha-express run test`
     - [ ] 사용자가 jest 환경일 때
         - 추가적으로 테스트 방법도 생각해봐야 함.
 

@@ -1,0 +1,12 @@
+{
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "name": "example-mocha-express",
+  "devDependencies": {
+    "mocha": "workspace:*"
+  },
+  "scripts": {
+    "test": "mocha --loader=ts-node/esm __tests__/**/*.test.ts"
+  }
+}
