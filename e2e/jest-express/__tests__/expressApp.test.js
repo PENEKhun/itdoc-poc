@@ -1,5 +1,5 @@
-import app from '../expressApp.js';
-import { describeAPI, itDoc, HttpStatus, field, HttpMethod } from 'chilldocs';
+const app = require('../expressApp.js');
+const { describeAPI, itDoc, HttpStatus, field, HttpMethod } = require('chilldocs');
 
 const targetApp = app;
 
@@ -9,11 +9,11 @@ describeAPI(
   {
     name: '회원가입 API',
     tag: 'Auth',
-    summary: '사용자로 부터 아이디와 패스워드를 받아 회원가입을 수행합니다.',
+    summary: '사용자로부터 아이디와 패스워드를 받아 회원가입을 수행합니다.',
   },
   targetApp,
-  (apiDoc) => {
-    itDoc('회원가입 성공', async () => {
+  function (apiDoc) {
+    itDoc('회원가입 성공', async function () {
       await apiDoc
         .test()
         .withRequestBody({
@@ -24,7 +24,7 @@ describeAPI(
         .expectStatus(HttpStatus.CREATED);
     });
 
-    itDoc('아이디를 입력하지 않으면 회원가입 실패한다.', async () => {
+    itDoc('아이디를 입력하지 않으면 회원가입 실패한다.', async function () {
       await apiDoc
         .test()
         .withRequestBody({
@@ -32,11 +32,11 @@ describeAPI(
         })
         .expectStatus(HttpStatus.BAD_REQUEST)
         .expectResponseBody({
-          "error": "username is required"
+          error: 'username is required',
         });
     });
 
-    itDoc('패스워드가 8자 이하면 회원가입 실패한다.', async () => {
+    itDoc('패스워드가 8자 이하면 회원가입 실패한다.', async function () {
       await apiDoc
         .test()
         .withRequestBody({
@@ -45,10 +45,10 @@ describeAPI(
         })
         .expectStatus(HttpStatus.BAD_REQUEST)
         .expectResponseBody({
-          "error": "password must be at least 8 characters"
+          error: 'password must be at least 8 characters',
         });
     });
-  },
+  }
 );
 
 describeAPI(
@@ -60,8 +60,8 @@ describeAPI(
     summary: '사용자 ID를 받아 사용자 정보를 반환합니다.',
   },
   targetApp,
-  (apiDoc) => {
-    itDoc('유효한 사용자 ID가 주어지면 200 응답을 반환한다.', async () => {
+  function (apiDoc) {
+    itDoc('유효한 사용자 ID가 주어지면 200 응답을 반환한다.', async function () {
       await apiDoc
         .test()
         .withPathParams({
@@ -72,11 +72,11 @@ describeAPI(
           userId: 'penek',
           username: 'hun',
           email: 'penekhun@gmail.com',
-          friends: ['zagabi', 'json']
+          friends: ['zagabi', 'json'],
         });
     });
 
-    itDoc('존재하지 않는 사용자 ID가 주어지면 404 응답을 반환한다.', async () => {
+    itDoc('존재하지 않는 사용자 ID가 주어지면 404 응답을 반환한다.', async function () {
       await apiDoc
         .test()
         .withPathParams({
@@ -96,8 +96,8 @@ describeAPI(
     summary: '특정 사용자의 친구를 삭제합니다.',
   },
   targetApp,
-  (apiDoc) => {
-    itDoc('존재 하지 않는 사용자 ID가 주어지면 400 응답을 반환한다.', async () => {
+  function (apiDoc) {
+    itDoc('존재 하지 않는 사용자 ID가 주어지면 400 응답을 반환한다.', async function () {
       await apiDoc
         .test()
         .withPathParams({
@@ -106,7 +106,7 @@ describeAPI(
         .expectStatus(HttpStatus.BAD_REQUEST);
     });
 
-    itDoc('존재하지 않는 친구 ID가 주어지면 404 응답을 반환한다.', async () => {
+    itDoc('존재하지 않는 친구 ID가 주어지면 404 응답을 반환한다.', async function () {
       await apiDoc
         .test()
         .withPathParams({
@@ -116,7 +116,7 @@ describeAPI(
         .expectStatus(HttpStatus.NOT_FOUND);
     });
 
-    itDoc('유효한 사용자 ID와 친구 ID가 주어지면 정상 삭제된다.', async () => {
+    itDoc('유효한 사용자 ID와 친구 ID가 주어지면 정상 삭제된다.', async function () {
       await apiDoc
         .test()
         .withPathParams({
@@ -126,5 +126,4 @@ describeAPI(
         .expectStatus(HttpStatus.NO_CONTENT);
     });
   }
-)
-
+);

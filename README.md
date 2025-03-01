@@ -1,6 +1,6 @@
 # chilldoc poc
 
-- [유스케이스](https://github.com/PENEKhun/itdoc-poc/blob/main/__tests__/cdoc.test.ts)
+- [유스케이스](https://github.com/PENEKhun/itdoc-poc/blob/main/e2e)
 - [poc](https://github.com/PENEKhun/itdoc-poc/tree/main/lib)
 ## test?
 
@@ -11,11 +11,13 @@ npm install
 # build
 npm run build
 
-# run usecase
+# run usecase (with mocha environment)
 npm --prefix ./e2e/mocha-express run test
+
+# run usecase (with jest environment)
+npm --prefix ./e2e/jest-express run test
 ```
 
-<img width="659" alt="image" src="https://github.com/user-attachments/assets/06c266e4-d308-4cb4-83b1-afa93a6ef9fa" />  
 
 # TODO
 
@@ -23,9 +25,12 @@ npm --prefix ./e2e/mocha-express run test
 
 - 테스트 프레임워크 호환성
     - [x] 사용자가 mocha 환경일 때
-      - ` npm --prefix ./e2e/mocha-express run test`
-    - [ ] 사용자가 jest 환경일 때
-        - 추가적으로 테스트 방법도 생각해봐야 함.
+        - ` npm --prefix ./e2e/mocha-express run test`
+        - <img width="1018" alt="image" src="https://github.com/user-attachments/assets/8fb1eaf8-2093-46bc-b470-2c4cd393dc8b" />
+
+    - [x] 사용자가 jest 환경일 때
+        - `npm --prefix ./e2e/jest-express run test`
+        - <img width="975" alt="image" src="https://github.com/user-attachments/assets/e37bed75-aaa3-43e4-8206-771ee400bb27" />
 
 - [ ] 코드 깔끔하게 정리
 - [ ] 구현되지 않은 기능 확인

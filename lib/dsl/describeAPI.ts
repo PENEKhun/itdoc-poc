@@ -10,13 +10,13 @@ import { getTestAdapterExports } from './adapters/index.js';
  * @param app Express 앱 인스턴스 (supertest 생성에 사용)
  * @param callback API 테스트 함수
  */
-export const describeAPI = async (
+export const describeAPI = (
   method: HttpMethod,
   url: string,
   options: APIDocOptions,
   app: any,
   callback: (apiDoc: APIDoc) => void,
-): Promise<void> => {
+): void => {
   if (!options.name) {
     throw new Error('API 이름이 필요합니다.');
   }
@@ -33,8 +33,7 @@ export const describeAPI = async (
     throw new Error('API 테스트 함수가 필요합니다.');
   }
 
-  const { describeCommon } = await getTestAdapterExports();
-  console.debug(describeCommon);
+  const { describeCommon } = getTestAdapterExports();
   describeCommon(`${options.name} | [${method}] ${url}`, () => {
     const apiDoc = new APIDoc(method, url, options, app);
     callback(apiDoc);

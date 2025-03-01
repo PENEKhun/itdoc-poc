@@ -1,28 +1,28 @@
-import express from 'express';
+const express = require('express');
 
 const app = express();
 
 app.use(express.json());
 
-app.post('/signup', function(req, res) {
+app.post('/signup', function (req, res) {
   const { username, password } = req.body;
 
   // validate username
   if (!username) {
-    return res.status(400).json( {
-      error: 'username is required'
+    return res.status(400).json({
+      error: 'username is required',
     });
   }
 
   // validate password
   if (!password) {
-    return res.status(400).json( {
-      error: 'password is required'
+    return res.status(400).json({
+      error: 'password is required',
     });
   }
   if (password.length < 8) {
-    return res.status(400).json( {
-      error: 'password must be at least 8 characters'
+    return res.status(400).json({
+      error: 'password must be at least 8 characters',
     });
   }
 
@@ -58,4 +58,4 @@ app.delete('/users/:userId/friends/:friendName', (req, res) => {
   return res.status(204).json();
 });
 
-export default app;
+module.exports = app;

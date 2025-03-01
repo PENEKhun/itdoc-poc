@@ -10,6 +10,6 @@
     "@babel/plugin-transform-modules-commonjs": "workspace:*"
   },
   "scripts": {
-    "test": "jest"
+    "test": "NODE_OPTIONS='--experimental-vm-modules' jest"
   }
 }

@@ -12,5 +12,5 @@ export interface UserTestInterface {
   after: (fn: () => void) => void;
   beforeEach: (fn: () => void) => void;
   afterEach: (fn: () => void) => void;
-  expect: (fn: () => void) => void;
+  // expect: (fn: () => void) => void;
 }

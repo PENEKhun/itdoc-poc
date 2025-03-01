@@ -6,7 +6,6 @@ import {
   beforeEach as mochaBeforeEach,
   afterEach as mochaAfterEach,
 } from 'mocha';
-import { expect as chaiExpect } from 'chai';
 import { TestFramework } from './TestFramework.js';
 import { UserTestInterface } from './UserTestInterface.js';
 
@@ -35,9 +34,5 @@ export class MochaAdapter implements UserTestInterface {
 
   afterEach(fn: () => void) {
     mochaAfterEach(fn);
-  }
-
-  expect(fn: () => void) {
-    return chaiExpect(fn);
   }
 }

@@ -4,45 +4,27 @@ import { UserTestInterface } from './UserTestInterface.js';
 export class JestAdapter implements UserTestInterface {
   name = TestFramework.Jest;
 
-  private jestModule: typeof import('@jest/globals') | null = null;
-
-  async init() {
-    if (!this.jestModule) {
-      this.jestModule = await import('@jest/globals');
-    }
+  describe(name, fn) {
+    global.describe(name, fn);
   }
 
-  async describe(name: string, fn: () => void) {
-    await this.init();
-    this.jestModule!.describe(name, fn);
+  it(name, fn) {
+    global.it(name, fn);
   }
 
-  async it(name: string, fn: () => void) {
-    await this.init();
-    this.jestModule!.it(name, fn);
+  before(fn) {
+    global.beforeAll(fn);
   }
 
-  async before(fn: () => void) {
-    await this.init();
-    this.jestModule!.beforeAll(fn);
+  after(fn) {
+    global.afterAll(fn);
   }
 
-  async after(fn: () => void) {
-    await this.init();
-    this.jestModule!.afterAll(fn);
+  beforeEach(fn) {
+    global.beforeEach(fn);
   }
 
-  async beforeEach(fn: () => void) {
-    await this.init();
-    this.jestModule!.beforeEach(fn);
-  }
-
-  async afterEach(fn: () => void) {
-    await this.init();
-    this.jestModule!.afterEach(fn);
-  }
-
-  get expect() {
-    return this.jestModule?.expect;
+  afterEach(fn) {
+    global.afterEach(fn);
   }
 }

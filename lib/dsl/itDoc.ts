@@ -5,10 +5,10 @@ import { getTestAdapterExports } from './adapters/index.js';
  * @param description 테스트 설명
  * @param testFn 테스트 함수
  */
-export const itDoc = async (
+export const itDoc = (
   description: string,
   testFn: () => Promise<void>,
-): Promise<void> => {
+): void => {
   if (!description) {
     throw new Error('테스트 설명이 필요합니다.');
   }
@@ -17,7 +17,7 @@ export const itDoc = async (
     throw new Error('테스트 함수가 필요합니다.');
   }
 
-  const { itCommon } = await getTestAdapterExports();
+  const { itCommon } = getTestAdapterExports();
   itCommon(description, async () => {
     await testFn();
   });

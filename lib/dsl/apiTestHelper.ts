@@ -159,7 +159,12 @@ export class APITestBuilder {
   private readonly url: string;
   private readonly app: any;
 
-  constructor(defaults: APITestConfig = {}, method: HttpMethod, url: string, app: any) {
+  constructor(
+    defaults: APITestConfig = {},
+    method: HttpMethod,
+    url: string,
+    app: any,
+  ) {
     this.config = { ...defaults };
     this.method = method;
     this.url = url;
@@ -215,7 +220,10 @@ export class APITestBuilder {
     let finalUrl = this.url;
     if (this.config.pathParams) {
       for (const [key, fieldObj] of Object.entries(this.config.pathParams)) {
-        finalUrl = finalUrl.replace(`{${key}}`, encodeURIComponent(fieldObj.example));
+        finalUrl = finalUrl.replace(
+          `{${key}}`,
+          encodeURIComponent(fieldObj.example),
+        );
       }
     }
 
@@ -223,7 +231,9 @@ export class APITestBuilder {
     let req = requestInstance[this.method.toLowerCase()](finalUrl);
 
     if (this.config.requestHeaders) {
-      for (const [key, headerObj] of Object.entries(this.config.requestHeaders)) {
+      for (const [key, headerObj] of Object.entries(
+        this.config.requestHeaders,
+      )) {
         req = req.set(key, headerObj.example as string);
       }
     }
@@ -252,7 +262,7 @@ export class APITestBuilder {
       req = req.expect((res: Response) => {
         validateResponse(
           this.config.expectedResponseBody as Record<string, any>,
-          res.body
+          res.body,
         );
       });
     }
@@ -261,7 +271,10 @@ export class APITestBuilder {
     if (!this.config.expectedResponseBody) {
       req = req.expect((res: Response) => {
         if (Object.keys(res.body).length > 0) {
-          throw new Error('Expected response body is required \n    ' + JSON.stringify(res.body, null, 2));
+          throw new Error(
+            'Expected response body is required \n    ' +
+              JSON.stringify(res.body, null, 2),
+          );
         }
       });
     }
@@ -270,31 +283,52 @@ export class APITestBuilder {
     try {
       const res = await req;
       if (this.config.prettyPrint) {
-        console.log("=== API TEST REQUEST ===");
-        console.log("Method:", this.method);
-        console.log("URL:", finalUrl);
-        console.log("Headers:", JSON.stringify(this.config.requestHeaders, null, 2));
-        console.log("Query Params:", JSON.stringify(this.config.queryParams, null, 2));
-        console.log("Request Body:", JSON.stringify(this.config.requestBody, null, 2));
-        console.log("=== API TEST RESPONSE ===");
-        console.log("Status:", res.status);
-        console.log("Response Body:", JSON.stringify(res.body, null, 2));
+        console.log('=== API TEST REQUEST ===');
+        console.log('Method:', this.method);
+        console.log('URL:', finalUrl);
+        console.log(
+          'Headers:',
+          JSON.stringify(this.config.requestHeaders, null, 2),
+        );
+        console.log(
+          'Query Params:',
+          JSON.stringify(this.config.queryParams, null, 2),
+        );
+        console.log(
+          'Request Body:',
+          JSON.stringify(this.config.requestBody, null, 2),
+        );
+        console.log('=== API TEST RESPONSE ===');
+        console.log('Status:', res.status);
+        console.log('Response Body:', JSON.stringify(res.body, null, 2));
       }
       return res;
     } catch (error: any) {
       if (this.config.prettyPrint) {
-        console.log("=== API TEST REQUEST (on Error) ===");
-        console.log("Method:", this.method);
-        console.log("URL:", finalUrl);
-        console.log("Headers:", JSON.stringify(this.config.requestHeaders, null, 2));
-        console.log("Query Params:", JSON.stringify(this.config.queryParams, null, 2));
-        console.log("Request Body:", JSON.stringify(this.config.requestBody, null, 2));
+        console.log('=== API TEST REQUEST (on Error) ===');
+        console.log('Method:', this.method);
+        console.log('URL:', finalUrl);
+        console.log(
+          'Headers:',
+          JSON.stringify(this.config.requestHeaders, null, 2),
+        );
+        console.log(
+          'Query Params:',
+          JSON.stringify(this.config.queryParams, null, 2),
+        );
+        console.log(
+          'Request Body:',
+          JSON.stringify(this.config.requestBody, null, 2),
+        );
         if (error.response) {
-          console.log("=== API TEST RESPONSE (Error) ===");
-          console.log("Status:", error.response.status);
-          console.log("Response Body:", JSON.stringify(error.response.body, null, 2));
+          console.log('=== API TEST RESPONSE (Error) ===');
+          console.log('Status:', error.response.status);
+          console.log(
+            'Response Body:',
+            JSON.stringify(error.response.body, null, 2),
+          );
         } else {
-          console.log("Error Message:", error.message);
+          console.log('Error Message:', error.message);
         }
       }
       throw error;
@@ -303,7 +337,7 @@ export class APITestBuilder {
 
   then<TResult1 = Response, TResult2 = never>(
     resolve?: ((value: Response) => TResult1 | PromiseLike<TResult1>) | null,
-    reject?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null
+    reject?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null,
   ): Promise<TResult1 | TResult2> {
     return this.runTest().then(resolve, reject);
   }
@@ -328,7 +362,12 @@ export class APIDoc {
   options: APIDocOptions;
   app: any;
 
-  constructor(method: HttpMethod, url: string, options: APIDocOptions, app: any) {
+  constructor(
+    method: HttpMethod,
+    url: string,
+    options: APIDocOptions,
+    app: any,
+  ) {
     this.method = method;
     this.url = url;
     this.options = options;
@@ -336,6 +375,11 @@ export class APIDoc {
   }
 
   test(): APITestBuilder {
-    return new APITestBuilder(this.options.defaults, this.method, this.url, this.app);
+    return new APITestBuilder(
+      this.options.defaults,
+      this.method,
+      this.url,
+      this.app,
+    );
   }
 }
