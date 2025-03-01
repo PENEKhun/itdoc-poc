@@ -46,3 +46,5 @@ npm --prefix ./e2e/jest-express run test
       ```
 - [ ] IDE에서 제공된 힌트 정정
 - [ ] e2e 경로에서 스냅샷 테스트를 사용할 수 있도록 ??
+  - example : https://github.com/PENEKhun/itdoc-poc/blob/main/e2e/mocha-express/__tests__/__snapshots__/expressApp.usecase.snapshot
+  - 흠 근데 굳이 해야되나? 고민된다!
