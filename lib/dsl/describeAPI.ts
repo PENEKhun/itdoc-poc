@@ -34,6 +34,7 @@ export const describeAPI = async (
   }
 
   const { describeCommon } = await getTestAdapterExports();
+  console.debug(describeCommon);
   describeCommon(`${options.name} | [${method}] ${url}`, () => {
     const apiDoc = new APIDoc(method, url, options, app);
     callback(apiDoc);

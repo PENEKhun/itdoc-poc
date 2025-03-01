@@ -40,3 +40,4 @@ npm --prefix ./e2e/mocha-express run test
       })
       ```
 - [ ] IDE에서 제공된 힌트 정정
+- [ ] e2e 경로에서 스냅샷 테스트를 사용할 수 있도록 ??

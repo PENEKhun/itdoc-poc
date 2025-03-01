@@ -30,6 +30,7 @@ async function initializeAdapter(): Promise<UserTestInterface> {
   const framework: TestFramework = detectTestFramework();
   let adapter: UserTestInterface;
 
+  console.debug("now test framework is ", framework);
   switch (framework) {
     case TestFramework.Jest: {
       /*
@@ -54,6 +55,7 @@ async function initializeAdapter(): Promise<UserTestInterface> {
  */
 export async function getTestAdapterExports() {
   const adapter = await initializeAdapter();
+  console.debug("hi ", adapter);
   return {
     describeCommon: adapter.describe.bind(adapter),
     itCommon: adapter.it.bind(adapter),

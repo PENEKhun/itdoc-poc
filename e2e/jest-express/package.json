@@ -1,0 +1,15 @@
+{
+  "private": true,
+  "version": "0.0.0",
+  "name": "example-jest-express",
+  "devDependencies": {
+    "jest": "workspace:*",
+    "chilldocs": "workspace:*",
+    "babel-jest": "workspace:*",
+    "@babel/core": "workspace:*",
+    "@babel/plugin-transform-modules-commonjs": "workspace:*"
+  },
+  "scripts": {
+    "test": "jest"
+  }
+}

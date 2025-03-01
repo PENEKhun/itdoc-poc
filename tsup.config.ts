@@ -10,5 +10,5 @@ export default defineConfig({
   outExtension({ format }) {
     return format === 'esm' ? { js: '.mjs' } : { js: '.cjs' };
   },
-  external: ['path', 'mocha', 'chai'],
+  external: ['path', 'mocha', 'chai', 'jest'],
 });

@@ -1,44 +1,48 @@
-import JestPackage from '@jest/globals';
-
-const {
-  describe: jestDescribe,
-  it: jestIt,
-  beforeAll: jestBeforeAll,
-  afterAll: jestAfterAll,
-  beforeEach: jestBeforeEach,
-  afterEach: jestAfterEach,
-  expect: jestExpect,
-} = JestPackage;
-
 import { TestFramework } from './TestFramework.js';
 import { UserTestInterface } from './UserTestInterface.js';
 
 export class JestAdapter implements UserTestInterface {
   name = TestFramework.Jest;
 
-  describe(name: string, fn: () => void) {
-    jestDescribe(name, fn);
+  private jestModule: typeof import('@jest/globals') | null = null;
+
+  async init() {
+    if (!this.jestModule) {
+      this.jestModule = await import('@jest/globals');
+    }
   }
 
-  it(name: string, fn: () => void) {
-    jestIt(name, fn);
+  async describe(name: string, fn: () => void) {
+    await this.init();
+    this.jestModule!.describe(name, fn);
   }
 
-  before(fn: () => void) {
-    jestBeforeAll(fn);
+  async it(name: string, fn: () => void) {
+    await this.init();
+    this.jestModule!.it(name, fn);
   }
 
-  after(fn: () => void) {
-    jestAfterAll(fn);
+  async before(fn: () => void) {
+    await this.init();
+    this.jestModule!.beforeAll(fn);
   }
 
-  beforeEach(fn: () => void) {
-    jestBeforeEach(fn);
+  async after(fn: () => void) {
+    await this.init();
+    this.jestModule!.afterAll(fn);
   }
 
-  afterEach(fn: () => void) {
-    jestAfterEach(fn);
+  async beforeEach(fn: () => void) {
+    await this.init();
+    this.jestModule!.beforeEach(fn);
   }
 
-  expect = jestExpect;
+  async afterEach(fn: () => void) {
+    await this.init();
+    this.jestModule!.afterEach(fn);
+  }
+
+  get expect() {
+    return this.jestModule?.expect;
+  }
 }
