@@ -1,0 +1,15 @@
+{
+  "name": "chilldocs",
+  "version": "0.0.0",
+  "type": "module",
+  "main": "./build/index.cjs",
+  "types": "./build/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./build/index.d.ts",
+      "require": "./build/index.cjs",
+      "import": "./build/index.mjs",
+      "default": "./build/index.cjs"
+    }
+  }
+}

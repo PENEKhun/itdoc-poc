@@ -4,9 +4,10 @@
   "type": "module",
   "name": "example-mocha-express",
   "devDependencies": {
-    "mocha": "workspace:*"
+    "mocha": "workspace:*",
+    "chilldocs": "workspace:*"
   },
   "scripts": {
-    "test": "mocha --loader=ts-node/esm __tests__/**/*.test.ts"
+    "test": "mocha ./__tests__/expressApp.test.js"
   }
 }

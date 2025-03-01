@@ -37,5 +37,7 @@ export class MochaAdapter implements UserTestInterface {
     mochaAfterEach(fn);
   }
 
-  expect: chaiExpect;
+  expect(fn: () => void) {
+    return chaiExpect(fn);
+  }
 }

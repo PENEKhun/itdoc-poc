@@ -1,14 +1,14 @@
-import { itCommon } from './adapters/index.js';
+import { getTestAdapterExports } from './adapters/index.js';
 
 /**
  * 케이스 별 테스트를 정의를 위한 함수
  * @param description 테스트 설명
  * @param testFn 테스트 함수
  */
-export const itDoc = (
+export const itDoc = async (
   description: string,
   testFn: () => Promise<void>,
-): void => {
+): Promise<void> => {
   if (!description) {
     throw new Error('테스트 설명이 필요합니다.');
   }
@@ -17,6 +17,7 @@ export const itDoc = (
     throw new Error('테스트 함수가 필요합니다.');
   }
 
+  const { itCommon } = await getTestAdapterExports();
   itCommon(description, async () => {
     await testFn();
   });

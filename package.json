@@ -1,18 +1,18 @@
 {
-  "name": "chilldocs",
+  "name": "@chilldocs/monorepo",
+  "private": "true",
   "version": "0.0.0",
   "description": "POC",
   "type": "module",
-  "main": "./lib",
   "scripts": {
+    "build": "tsup",
     "lint": "eslint .",
     "test": "mocha --loader=ts-node/esm __tests__/**/*.test.ts",
-    "test:e2e": "mocha --loader=ts-node/esm __tests__/**/cdoc.test.ts",
     "prettier": "prettier \"{lib,__{tests}__}/**/*.{ts,mts}\" --config .prettierrc --write",
     "prettier:check": "prettier \"{lib,__{tests}__}/**/*.{ts,mts}\" --config .prettierrc --check"
   },
   "workspaces": [
-    "lib/*",
+    "lib",
     "examples/*"
   ],
   "author": {
@@ -24,11 +24,13 @@
   "dependencies": {
     "@jest/globals": "^29.7.0",
     "chai": "^5.2.0",
+    "chilldocs": "^0.0.0",
     "supertest": "^7.0.0",
     "tslib": "~2.8"
   },
   "devDependencies": {
     "@eslint/js": "~9.17",
+    "@types/chai": "^5.0.1",
     "@types/eslint__js": "~8.42",
     "@types/mocha": "^10.0.10",
     "@types/node": "~20",
@@ -42,6 +44,7 @@
     "prettier": "~3.4",
     "ts-api-utils": "~2.0",
     "ts-node": "^10.9.2",
+    "tsup": "^8.4.0",
     "typescript": "~5.7",
     "typescript-eslint": "~8.19"
   },

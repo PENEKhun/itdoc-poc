@@ -1,9 +1,5 @@
-import { describeAPI } from '../../../lib/dsl/describeAPI.js';
 import app from '../expressApp.js';
-import { HttpMethod } from '../../../lib/dsl/enums/HttpMethod.js';
-import { itDoc } from '../../../lib/dsl/itDoc.js';
-import { field } from '../../../lib/dsl/apiTestHelper.js';
-import { HttpStatus } from '../../../lib/dsl/enums/HttpStatus.js';
+import { describeAPI, itDoc, HttpStatus, field, HttpMethod } from 'chilldocs';
 
 const targetApp = app;
 
@@ -131,3 +127,4 @@ describeAPI(
     });
   }
 )
+

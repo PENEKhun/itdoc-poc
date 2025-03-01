@@ -1,12 +1,10 @@
 {
   "compilerOptions": {
     "target": "es2022",
-    "module": "ESNext",
+    "module": "esnext",
     "lib": ["ES2022", "DOM"],
-    "moduleResolution": "Bundler",
-    "noEmit": true,
-    "rootDir": "",
-    "outDir": "build",
+    "declaration": true,
+    "noEmit": false,
     "allowSyntheticDefaultImports": true,
     "importHelpers": true,
     "alwaysStrict": true,
@@ -14,12 +12,10 @@
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,
     "noImplicitReturns": true,
-//    "noUnusedLocals": true,
-//    "noUnusedParameters": true,
     "noImplicitAny": false,
     "noImplicitThis": false,
-    "strictNullChecks": false,
+    "strictNullChecks": false
   },
-  "include": ["lib", "__tests__"],
+  "include": ["lib"],
   "exclude": ["node_modules"]
 }

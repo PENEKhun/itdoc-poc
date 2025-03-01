@@ -5,13 +5,21 @@
 ## test?
 
 ```bash
-# 유스케이스만 테스트하기 위해서 expressApp.test.ts 지정
-mocha --loader=ts-node/esm __tests__/expressApp.test.ts
+# install
+npm install
+
+# build
+npm run build
+
+# run usecase
+npm --prefix ./e2e/mocha-express run test
 ```
 
 <img width="659" alt="image" src="https://github.com/user-attachments/assets/06c266e4-d308-4cb4-83b1-afa93a6ef9fa" />  
 
 # TODO
+
+- 빌드 테스트
 
 - 테스트 프레임워크 호환성
     - [x] 사용자가 mocha 환경일 때
@@ -31,3 +39,4 @@ mocha --loader=ts-node/esm __tests__/expressApp.test.ts
           friendId: field('유효한 친구 ID', 'zagabi'),
       })
       ```
+- [ ] IDE에서 제공된 힌트 정정
