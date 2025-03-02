@@ -19,7 +19,7 @@
     "lint": "eslint .",
     "prettier": "prettier \"{lib,__{tests}__}/**/*.{ts,mts}\" --config .prettierrc --write",
     "prettier:check": "prettier \"{lib,__{tests}__}/**/*.{ts,mts}\" --config .prettierrc --check",
-    "test": "mocha --loader=ts-node/esm __tests__/**/*.test.ts"
+    "test": "mocha --loader=ts-node/esm lib/__tests__/**/*.test.ts"
   },
   "dependencies": {
     "@jest/globals": "^29.7.0",
@@ -38,6 +38,7 @@
     "@types/supertest": "^6.0.2",
     "@typescript-eslint/parser": "~8.19",
     "babel-jest": "^29.7.0",
+    "chai": "^5.2.0",
     "eslint": "~9.17",
     "eslint-config-prettier": "~9.1",
     "express": "^4.21.2",
