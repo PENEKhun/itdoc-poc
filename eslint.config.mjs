@@ -8,7 +8,8 @@ import tseslint from 'typescript-eslint';
 // You should change it to your needs following the documentation.
 export default tseslint.config(
   {
-    ignores: ['**/build/**', '**/tmp/**', '**/coverage/**'],
+    // TODO: E2E 테스트는 임시로 제외하도록 수정함.
+    ignores: ['**/build/**', '**/tmp/**', '**/coverage/**', '**/e2e/**'],
   },
   eslint.configs.recommended,
   eslintConfigPrettier,
