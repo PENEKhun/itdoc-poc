@@ -26,7 +26,7 @@ npm --prefix ./e2e/jest-express run test
 - 테스트 프레임워크 호환성
     - [x] 사용자가 mocha 환경일 때
         - ` npm --prefix ./e2e/mocha-express run test`
-        - <img width="1018" alt="image" src="https://github.com/user-attachments/assets/8fb1eaf8-2093-46bc-b470-2c4cd393dc8b" />
+        - <img width="964" alt="image" src="https://github.com/user-attachments/assets/88f5a9cd-d6fb-4b6f-9d88-39f1c672808d" />
 
     - [x] 사용자가 jest 환경일 때
         - `npm --prefix ./e2e/jest-express run test`

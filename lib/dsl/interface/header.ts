@@ -7,7 +7,6 @@ export interface DSLHeader<T = any> extends DSLField<T> {
   name: string;
 }
 
-
 export const header = <T>(
   name: string,
   description: string,
