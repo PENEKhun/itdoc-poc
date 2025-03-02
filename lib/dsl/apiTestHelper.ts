@@ -1,150 +1,17 @@
 import { HttpMethod } from './enums/HttpMethod.js';
 import { HttpStatus } from './enums/HttpStatus.js';
 import supertest from 'supertest';
-
-/**
- * DSL Field 인터페이스
- * - example은 값 또는 값 검증 함수일 수 있습니다.
- */
-export interface DSLField<T = any> {
-  description: string;
-  example: T | ((value: any) => void);
-}
-
-/**
- * DSL Header 타입 (field에 name 속성이 추가된 형태)
- */
-export interface DSLHeader<T = any> extends DSLField<T> {
-  name: string;
-}
-
-/**
- * DSL Helper Functions
- */
-export const field = <T>(
-  description: string,
-  example: T | ((value: any) => void),
-): DSLField<T> => ({ description, example });
-
-export const header = <T>(
-  name: string,
-  description: string,
-  example: T | ((value: any) => void),
-): DSLHeader<T> => ({ name, description, example });
-
-/**
- * 재귀적으로 expected 객체와 실제 응답을 검증하는 헬퍼 함수
- */
-const validateResponse = (
-  expectedObj: any,
-  actualObj: any,
-  path: string = '',
-): void => {
-  // 배열인 경우 엄격하게 길이와 요소 순서를 비교합니다.
-  if (Array.isArray(expectedObj)) {
-    if (!Array.isArray(actualObj)) {
-      throw new Error(
-        `Expected response body[${path}] to be an array but got ${actualObj}`,
-      );
-    }
-    if (expectedObj.length !== actualObj.length) {
-      throw new Error(
-        `Expected response body[${path}] to have length ${expectedObj.length} but got ${actualObj.length}`,
-      );
-    }
-    expectedObj.forEach((expectedElem, index) => {
-      const currentPath = path ? `${path}[${index}]` : `[${index}]`;
-      if (expectedElem && typeof expectedElem === 'object') {
-        validateResponse(expectedElem, actualObj[index], currentPath);
-      } else {
-        if (actualObj[index] !== expectedElem) {
-          throw new Error(
-            `Expected response body[${currentPath}] to be ${expectedElem} but got ${actualObj[index]}`,
-          );
-        }
-      }
-    });
-    return;
-  }
-
-  // 배열이 아닌 객체의 경우
-  for (const key in expectedObj) {
-    const currentPath = path ? `${path}.${key}` : key;
-    const expectedVal = expectedObj[key];
-    const actualVal = actualObj ? actualObj[key] : undefined;
-
-    // DSL Field로 정의된 경우
-    if (
-      expectedVal &&
-      typeof expectedVal === 'object' &&
-      'example' in expectedVal
-    ) {
-      const expected = expectedVal.example;
-      if (typeof expected === 'function') {
-        console.log(`Validating field "${currentPath}" with value:`, actualVal);
-        expected(actualVal);
-      } else {
-        if (actualVal !== expected) {
-          throw new Error(
-            `Expected response body[${currentPath}] to be ${expected} but got ${actualVal}`,
-          );
-        }
-      }
-    }
-    // 만약 해당 필드가 배열이면
-    else if (Array.isArray(expectedVal)) {
-      if (!Array.isArray(actualVal)) {
-        throw new Error(
-          `Expected response body[${currentPath}] to be an array but got ${actualVal}`,
-        );
-      }
-      if (expectedVal.length !== actualVal.length) {
-        throw new Error(
-          `Expected response body[${currentPath}] to have length ${expectedVal.length} but got ${actualVal.length}`,
-        );
-      }
-      for (let i = 0; i < expectedVal.length; i++) {
-        const arrayPath = `${currentPath}[${i}]`;
-        if (expectedVal[i] && typeof expectedVal[i] === 'object') {
-          validateResponse(expectedVal[i], actualVal[i], arrayPath);
-        } else {
-          if (actualVal[i] !== expectedVal[i]) {
-            throw new Error(
-              `Expected response body[${arrayPath}] to be ${expectedVal[i]} but got ${actualVal[i]}`,
-            );
-          }
-        }
-      }
-    }
-    // 객체인 경우 재귀적으로 검증합니다.
-    else if (expectedVal && typeof expectedVal === 'object') {
-      if (typeof actualVal !== 'object') {
-        throw new Error(
-          `Expected response body[${currentPath}] to be an object but got ${actualVal}`,
-        );
-      }
-      validateResponse(expectedVal, actualVal, currentPath);
-    }
-    // 기본 타입 비교
-    else {
-      if (actualVal !== expectedVal) {
-        throw new Error(
-          `Expected response body[${currentPath}] to be ${expectedVal} but got ${actualVal}`,
-        );
-      }
-    }
-  }
-};
+import { DSLField } from './interface/field';
+import { validateResponse } from './validateResponse';
 
 /**
  * API 테스트 설정 인터페이스
  */
 export interface APITestConfig {
-  // pathParams 타입을 DSLField를 사용하도록 변경합니다.
-  pathParams?: Record<string, DSLField<any>>;
-  queryParams?: Record<string, DSLField<any>>;
-  requestBody?: Record<string, DSLField<any>>;
-  requestHeaders?: Record<string, DSLField<any>>;
+  pathParams?: Record<string, DSLField>;
+  queryParams?: Record<string, DSLField>;
+  requestBody?: Record<string, DSLField>;
+  requestHeaders?: Record<string, DSLField>;
   expectedStatus?: HttpStatus | number;
   expectedResponseBody?: Record<string, any>;
   prettyPrint?: boolean;
@@ -172,17 +39,17 @@ export class APITestBuilder {
   }
 
   // DSLField를 사용하는 pathParams 메서드
-  withPathParams(params: Record<string, DSLField<any>>): this {
+  withPathParams(params: Record<string, DSLField>): this {
     this.config.pathParams = params;
     return this;
   }
 
-  withQueryParams(params: Record<string, DSLField<any>>): this {
+  withQueryParams(params: Record<string, DSLField>): this {
     this.config.queryParams = params;
     return this;
   }
 
-  withRequestBody(body: Record<string, DSLField<any>>): this {
+  withRequestBody(body: Record<string, DSLField>): this {
     this.config.requestBody = body;
     return this;
   }
@@ -340,46 +207,5 @@ export class APITestBuilder {
     reject?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null,
   ): Promise<TResult1 | TResult2> {
     return this.runTest().then(resolve, reject);
-  }
-}
-
-/**
- * describeAPI 옵션 인터페이스
- */
-export interface APIDocOptions {
-  name?: string;
-  tag?: string;
-  summary?: string;
-  defaults?: APITestConfig;
-}
-
-/**
- * APIDoc 클래스
- */
-export class APIDoc {
-  method: HttpMethod;
-  url: string;
-  options: APIDocOptions;
-  app: any;
-
-  constructor(
-    method: HttpMethod,
-    url: string,
-    options: APIDocOptions,
-    app: any,
-  ) {
-    this.method = method;
-    this.url = url;
-    this.options = options;
-    this.app = app;
-  }
-
-  test(): APITestBuilder {
-    return new APITestBuilder(
-      this.options.defaults,
-      this.method,
-      this.url,
-      this.app,
-    );
   }
 }

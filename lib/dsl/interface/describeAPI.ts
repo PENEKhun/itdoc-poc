@@ -1,6 +1,6 @@
-import { HttpMethod } from './enums/HttpMethod.js';
-import { APIDoc, APIDocOptions } from './apiTestHelper.js';
-import { getTestAdapterExports } from './adapters/index.js';
+import { HttpMethod } from '../enums/HttpMethod';
+import { getTestAdapterExports } from '../adapters';
+import { ApiDoc, ApiDocOptions } from './apiDoc';
 
 /**
  * API 명세를 위한 describe 함수
@@ -13,9 +13,9 @@ import { getTestAdapterExports } from './adapters/index.js';
 export const describeAPI = (
   method: HttpMethod,
   url: string,
-  options: APIDocOptions,
+  options: ApiDocOptions,
   app: any,
-  callback: (apiDoc: APIDoc) => void,
+  callback: (apiDoc: ApiDoc) => void,
 ): void => {
   if (!options.name) {
     throw new Error('API 이름이 필요합니다.');
@@ -35,7 +35,7 @@ export const describeAPI = (
 
   const { describeCommon } = getTestAdapterExports();
   describeCommon(`${options.name} | [${method}] ${url}`, () => {
-    const apiDoc = new APIDoc(method, url, options, app);
+    const apiDoc = new ApiDoc(method, url, options, app);
     callback(apiDoc);
   });
 };

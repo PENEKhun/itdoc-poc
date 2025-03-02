@@ -1,4 +1,4 @@
-import { getTestAdapterExports } from './adapters/index.js';
+import { getTestAdapterExports } from '../adapters';
 
 /**
  * 케이스 별 테스트를 정의를 위한 함수
