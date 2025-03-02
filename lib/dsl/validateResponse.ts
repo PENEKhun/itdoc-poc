@@ -7,7 +7,11 @@ const isDSLField = (obj: any): boolean =>
 /**
  * DSL Field 검증을 담당합니다.
  */
-const validateDSLField = (expectedDSL: any, actualVal: any, path: string): void => {
+const validateDSLField = (
+  expectedDSL: any,
+  actualVal: any,
+  path: string,
+): void => {
   // DSL Field의 example이 함수인 경우
   if (typeof expectedDSL.example === 'function') {
     expectedDSL.example(actualVal);
@@ -28,12 +32,12 @@ const validateDSLField = (expectedDSL: any, actualVal: any, path: string): void 
   if (isDSLField(actualVal)) {
     if (actualVal.example !== expectedDSL.example) {
       throw new Error(
-        `Expected response body[${path}].example to be ${expectedDSL.example} but got ${actualVal.example}`
+        `Expected response body[${path}].example to be ${expectedDSL.example} but got ${actualVal.example}`,
       );
     }
   } else if (actualVal !== expectedDSL.example) {
     throw new Error(
-      `Expected response body[${path}] to be ${expectedDSL.example} but got ${actualVal}`
+      `Expected response body[${path}] to be ${expectedDSL.example} but got ${actualVal}`,
     );
   }
 };
@@ -41,15 +45,19 @@ const validateDSLField = (expectedDSL: any, actualVal: any, path: string): void 
 /**
  * 배열 검증을 담당합니다.
  */
-const validateArray = (expectedArr: any[], actualArr: any[], path: string): void => {
+const validateArray = (
+  expectedArr: any[],
+  actualArr: any[],
+  path: string,
+): void => {
   if (!Array.isArray(actualArr)) {
     throw new Error(
-      `Expected response body[${path}] to be an array but got ${actualArr}`
+      `Expected response body[${path}] to be an array but got ${actualArr}`,
     );
   }
   if (expectedArr.length !== actualArr.length) {
     throw new Error(
-      `Expected response body[${path}] to have length ${expectedArr.length} but got ${actualArr.length}`
+      `Expected response body[${path}] to have length ${expectedArr.length} but got ${actualArr.length}`,
     );
   }
   expectedArr.forEach((elem, index) => {
@@ -63,7 +71,7 @@ const validateArray = (expectedArr: any[], actualArr: any[], path: string): void
 export const validateResponse = (
   expected: any,
   actual: any,
-  path: string = ''
+  path: string = '',
 ): void => {
   // 배열인 경우
   if (Array.isArray(expected)) {
@@ -85,13 +93,13 @@ export const validateResponse = (
       } else if (expectedVal && typeof expectedVal === 'object') {
         if (!actualVal || typeof actualVal !== 'object') {
           throw new Error(
-            `Expected response body[${currentPath}] to be an object but got ${actualVal}`
+            `Expected response body[${currentPath}] to be an object but got ${actualVal}`,
           );
         }
         validateResponse(expectedVal, actualVal, currentPath);
       } else if (actualVal !== expectedVal) {
         throw new Error(
-          `Expected response body[${currentPath}] to be ${expectedVal} but got ${actualVal}`
+          `Expected response body[${currentPath}] to be ${expectedVal} but got ${actualVal}`,
         );
       }
     }
@@ -101,7 +109,7 @@ export const validateResponse = (
   // 원시 타입인 경우 직접 비교
   if (actual !== expected) {
     throw new Error(
-      `Expected response body[${path}] to be ${expected} but got ${actual}`
+      `Expected response body[${path}] to be ${expected} but got ${actual}`,
     );
   }
 };
