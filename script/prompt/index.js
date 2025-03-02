@@ -1,9 +1,3 @@
-// gptTemplates.js
-/**
- * 주어진 분석 대상(content)에 맞게 프롬프트 템플릿 문자열을 생성하여 반환합니다.
- * @param {string} content - 분석 대상 콘텐츠 (예: PDF 추출 내용)
- * @returns {string} - 완성된 프롬프트 템플릿
- */
 function getCdocprompt(content) {
     return ` 
     다음의 테스트내용을 기반으로 다음의 인터페이스를 갖춘 함수를 출력해주세요. 오로지 자바스크립트파일로만 떨어져야 합니다. 
