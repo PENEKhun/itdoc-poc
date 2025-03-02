@@ -32,7 +32,7 @@ describeAPI(
         })
         .expectStatus(HttpStatus.BAD_REQUEST)
         .expectResponseBody({
-          "error": "username is required"
+          "error": field('에러 메세지', 'username is required')
         });
     });
 
@@ -45,7 +45,7 @@ describeAPI(
         })
         .expectStatus(HttpStatus.BAD_REQUEST)
         .expectResponseBody({
-          "error": "password must be at least 8 characters"
+          "error": field('에러 메세지', 'password must be at least 8 characters')
         });
     });
   },
@@ -69,10 +69,10 @@ describeAPI(
         })
         .expectStatus(HttpStatus.OK)
         .expectResponseBody({
-          userId: 'penek',
-          username: 'hun',
-          email: 'penekhun@gmail.com',
-          friends: ['zagabi', 'json']
+          userId: field('유저 ID', 'penek'),
+          username: field('유저 이름', 'hun'),
+          email: field('유저 이메일', 'penekhun@gmail.com'),
+          friends: field('유저의 친구', ['zagabi', 'json']),
         });
     });
 

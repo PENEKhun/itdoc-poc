@@ -14,7 +14,7 @@ export const describeAPI = (
   method: HttpMethod,
   url: string,
   options: ApiDocOptions,
-  app: any,
+  app: unknown, // TODO: 이거 타입지정
   callback: (apiDoc: ApiDoc) => void,
 ): void => {
   if (!options.name) {

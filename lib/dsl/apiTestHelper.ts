@@ -1,25 +1,21 @@
 import { HttpMethod } from './enums/HttpMethod.js';
 import { HttpStatus } from './enums/HttpStatus.js';
-import supertest from 'supertest';
+import supertest, { Response } from 'supertest';
 import { DSLField } from './interface/field';
 import { validateResponse } from './validateResponse';
 
-/**
- * API 테스트 설정 인터페이스
- */
+export type PATH_PARAM_TYPES = string | number;
+export type QUERY_PARAM_TYPES = string | number | boolean;
 export interface APITestConfig {
-  pathParams?: Record<string, DSLField>;
-  queryParams?: Record<string, DSLField>;
+  pathParams?: Record<string, DSLField<PATH_PARAM_TYPES>>;
+  queryParams?: Record<string, DSLField<QUERY_PARAM_TYPES>>;
   requestBody?: Record<string, DSLField>;
-  requestHeaders?: Record<string, DSLField>;
+  requestHeaders?: Record<string, DSLField<string>>;
   expectedStatus?: HttpStatus | number;
-  expectedResponseBody?: Record<string, any>;
+  expectedResponseBody?: Record<string, DSLField>;
   prettyPrint?: boolean;
 }
 
-/**
- * APITestBuilder 클래스 (체인 빌더 DSL)
- */
 export class APITestBuilder {
   private config: APITestConfig;
   private readonly method: HttpMethod;
@@ -38,19 +34,25 @@ export class APITestBuilder {
     this.app = app;
   }
 
-  // DSLField를 사용하는 pathParams 메서드
-  withPathParams(params: Record<string, DSLField>): this {
+  withPathParams(params: Record<string, DSLField<string | number>>): this {
     this.config.pathParams = params;
     return this;
   }
 
-  withQueryParams(params: Record<string, DSLField>): this {
+  withQueryParams(
+    params: Record<string, DSLField<string | number | boolean>>,
+  ): this {
     this.config.queryParams = params;
     return this;
   }
 
-  withRequestBody(body: Record<string, DSLField>): this {
+  withRequestBody(body: Record<string, DSLField<any>>): this {
     this.config.requestBody = body;
+    return this;
+  }
+
+  withRequestHeaders(headers: Record<string, DSLField<string>>): this {
+    this.config.requestHeaders = headers;
     return this;
   }
 
@@ -68,7 +70,7 @@ export class APITestBuilder {
     return this;
   }
 
-  expectResponseBody(body: Record<string, any>): this {
+  expectResponseBody(body: Record<string, DSLField>): this {
     this.config.expectedResponseBody = body;
     return this;
   }
@@ -82,29 +84,24 @@ export class APITestBuilder {
     if (!this.config.expectedStatus) {
       throw new Error('Expected status is required');
     }
-
-    // pathParams에서 DSLField의 example 값을 사용하여 URL 치환
     let finalUrl = this.url;
     if (this.config.pathParams) {
       for (const [key, fieldObj] of Object.entries(this.config.pathParams)) {
         finalUrl = finalUrl.replace(
           `{${key}}`,
-          encodeURIComponent(fieldObj.example),
+          encodeURIComponent(fieldObj.example.toString()),
         );
       }
     }
-
     const requestInstance = supertest(this.app);
     let req = requestInstance[this.method.toLowerCase()](finalUrl);
-
     if (this.config.requestHeaders) {
       for (const [key, headerObj] of Object.entries(
         this.config.requestHeaders,
       )) {
-        req = req.set(key, headerObj.example as string);
+        req = req.set(key, headerObj.example);
       }
     }
-
     if (this.config.queryParams) {
       const queryParams: Record<string, any> = {};
       for (const [key, fieldObj] of Object.entries(this.config.queryParams)) {
@@ -112,7 +109,6 @@ export class APITestBuilder {
       }
       req = req.query(queryParams);
     }
-
     if (this.config.requestBody) {
       const body: Record<string, any> = {};
       for (const [key, fieldObj] of Object.entries(this.config.requestBody)) {
@@ -120,33 +116,28 @@ export class APITestBuilder {
       }
       req = req.send(body);
     }
-
     if (this.config.expectedStatus) {
       req = req.expect(this.config.expectedStatus);
     }
-
     if (this.config.expectedResponseBody) {
+      const expectedBody: Record<string, any> = {};
+      for (const [key, fieldObj] of Object.entries(this.config.expectedResponseBody)) {
+        expectedBody[key] = fieldObj.example;
+      }
       req = req.expect((res: Response) => {
-        validateResponse(
-          this.config.expectedResponseBody as Record<string, any>,
-          res.body,
-        );
+        validateResponse(expectedBody, res.body);
       });
     }
-
-    // 만약 응답 body가 존재하는데, expectedResponseBody가 없는 경우
     if (!this.config.expectedResponseBody) {
       req = req.expect((res: Response) => {
         if (Object.keys(res.body).length > 0) {
           throw new Error(
             'Expected response body is required \n    ' +
-              JSON.stringify(res.body, null, 2),
+            JSON.stringify(res.body, null, 2),
           );
         }
       });
     }
-
-    // console.log(JSON.stringify(req, null, 2));
     try {
       const res = await req;
       if (this.config.prettyPrint) {
