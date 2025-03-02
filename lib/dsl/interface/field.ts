@@ -1,4 +1,10 @@
-type FIELD_TYPES = string | number | boolean | object | Record<string, unknown> | FIELD_TYPES[];
+type FIELD_TYPES =
+  | string
+  | number
+  | boolean
+  | object
+  | Record<string, unknown>
+  | FIELD_TYPES[];
 
 /**
  * DSL Field 인터페이스

@@ -47,7 +47,6 @@ export const validateResponse = (
     ) {
       const expected = expectedVal.example;
       if (typeof expected === 'function') {
-        console.log(`Validating field "${currentPath}" with value:`, actualVal);
         expected(actualVal);
       } else {
         if (actualVal !== expected) {

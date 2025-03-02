@@ -121,7 +121,9 @@ export class APITestBuilder {
     }
     if (this.config.expectedResponseBody) {
       const expectedBody: Record<string, any> = {};
-      for (const [key, fieldObj] of Object.entries(this.config.expectedResponseBody)) {
+      for (const [key, fieldObj] of Object.entries(
+        this.config.expectedResponseBody,
+      )) {
         expectedBody[key] = fieldObj.example;
       }
       req = req.expect((res: Response) => {
@@ -133,7 +135,7 @@ export class APITestBuilder {
         if (Object.keys(res.body).length > 0) {
           throw new Error(
             'Expected response body is required \n    ' +
-            JSON.stringify(res.body, null, 2),
+              JSON.stringify(res.body, null, 2),
           );
         }
       });
