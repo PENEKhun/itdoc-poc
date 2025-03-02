@@ -125,16 +125,18 @@ describe('validateResponse 함수 검증', () => {
   describe('중첩 데이터 구조의 경우', () => {
     it('중첩 구조에서 데이터가 똑같은 경우 에러가 발생하지 않는다.', () => {
       const expected = {
-        데이터: [
-          { id: 1, 항목: ['가', '나'] },
-          { id: 2, 항목: ['다', '라'] },
-        ],
+        데이터: field('검색 결과', {
+          id: field('pk', {
+            항목: field('세부 항목', ['다', '라']),
+          }),
+        }),
       };
       const actual = {
-        데이터: [
-          { id: 1, 항목: ['가', '나'] },
-          { id: 2, 항목: ['다', '라'] },
-        ],
+        데이터: field('검색 결과', {
+          id: field('pk', {
+            항목: field('세부 항목', ['다', '라']),
+          }),
+        }),
       };
       expect(() => validateResponse(expected, actual)).to.not.throw();
     });

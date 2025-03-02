@@ -1,9 +1,9 @@
-type FIELD_TYPES =
+export type FIELD_TYPES =
   | string
   | number
   | boolean
   | object
-  | Record<string, unknown>
+  | Record<string, string | number | boolean | object | DSLField>
   | FIELD_TYPES[];
 
 /**
