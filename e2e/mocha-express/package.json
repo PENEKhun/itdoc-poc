@@ -1,13 +1,13 @@
 {
-  "private": true,
-  "version": "0.0.0",
-  "type": "module",
   "name": "example-mocha-express",
-  "devDependencies": {
-    "mocha": "workspace:*",
-    "chilldocs": "workspace:*"
-  },
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
   "scripts": {
     "test": "mocha ./__tests__/expressApp.test.js"
+  },
+  "devDependencies": {
+    "chilldocs": "workspace:*",
+    "mocha": "workspace:*"
   }
 }

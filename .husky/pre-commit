@@ -1,0 +1,3 @@
+# npm run lint 나중에 활성화 시키기
+npm run prettier
+sort-package-json "**/package.json"
