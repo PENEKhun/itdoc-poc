@@ -50,12 +50,16 @@ npm --prefix ./e2e/jest-express run test
   - 흠 근데 굳이 해야되나? 고민된다!
 
 
-# script/index.js
-## test description -> cdocs
-.env 생성 :: env.example 참고 
+# script
 
-실행방법 :: 이후 script/output 폴더 내의 output.js 로 저장이 됨. 
+## install
+1. .env 생성 :: env.example 참고 
+2. npm install -g redoc-cli widdershins
+3. script/oas 폴더내의 openapi.yaml 생성
+4. script/llm/index.js 수정(이부분에 대한 인터페이스는 추후 cdoc완성 후 cdoc 메서드 체이닝으로 부를 수 있게 설정할 예정)
+
+## exec
 ```
-cd script
-node index.js
-```
+node script/llm/index.js
+node script/makedocs/index.mjs
+``` 

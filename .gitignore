@@ -29,4 +29,5 @@ build/
 .DS_Store
 
 .env
-script/output/
+script/llm/output/
+script/makedocs/output/
