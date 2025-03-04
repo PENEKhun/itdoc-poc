@@ -1,30 +1,30 @@
-import { TestFramework } from './TestFramework.js';
-import { UserTestInterface } from './UserTestInterface.js';
+import { TestFramework } from "./TestFramework";
+import { UserTestInterface } from "./UserTestInterface";
 
 export class JestAdapter implements UserTestInterface {
-  name = TestFramework.Jest;
+    name = TestFramework.Jest;
 
-  describe(name, fn) {
-    global.describe(name, fn);
-  }
+    describe(name: string, fn: () => void) {
+        global.describe(name, fn);
+    }
 
-  it(name, fn) {
-    global.it(name, fn);
-  }
+    it(name: string, fn: () => void): void {
+        global.it(name, fn);
+    }
 
-  before(fn) {
-    global.beforeAll(fn);
-  }
+    before(fn: () => void): void {
+        (global as any).beforeAll(fn);
+    }
 
-  after(fn) {
-    global.afterAll(fn);
-  }
+    after(fn: () => void): void {
+        (global as any).afterAll(fn);
+    }
 
-  beforeEach(fn) {
-    global.beforeEach(fn);
-  }
+    beforeEach(fn: () => void): void {
+        global.beforeEach(fn);
+    }
 
-  afterEach(fn) {
-    global.afterEach(fn);
-  }
+    afterEach(fn: () => void): void {
+        global.afterEach(fn);
+    }
 }
