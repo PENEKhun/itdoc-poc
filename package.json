@@ -32,18 +32,18 @@
         "format": "prettier --write \"lib/**/*.ts\"",
         "postinstall": "husky",
         "lint": "eslint . --ext .ts",
-        "test": "mocha",
         "prettier": "prettier \"{lib,__{tests}__}/**/*.{ts,mts}\" --config .prettierrc --write",
-        "prettier:check": "prettier \"{lib,__{tests}__}/**/*.{ts,mts}\" --config .prettierrc --check"
+        "prettier:check": "prettier \"{lib,__{tests}__}/**/*.{ts,mts}\" --config .prettierrc --check",
+        "test": "mocha"
     },
     "mocha": {
         "extensions": [
             ".ts"
         ],
-        "spec": "lib/__tests__/**/*.test.ts",
         "node-option": [
             "import=tsx"
-        ]
+        ],
+        "spec": "lib/__tests__/**/*.test.ts"
     },
     "dependencies": {
         "jest": "^29.7.0",
