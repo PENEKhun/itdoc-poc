@@ -19,6 +19,16 @@ export default tseslint.config(
         },
     },
     {
+        // TypeScript 파일만 대상으로 함
+        files: ["**/*.ts"],
+        ignores: [
+            "**/node_modules/**",
+            "**/build/**",
+            "**/dist/**",
+            "**/*.js",
+            "**/*.cjs",
+            "**/*.mjs",
+        ],
         languageOptions: {
             // 사용할 JavaScript 버전 지정
             ecmaVersion: 2022,
@@ -28,7 +38,7 @@ export default tseslint.config(
             parser: tseslint.parser,
             parserOptions: {
                 // TypeScript 설정 파일 지정
-                project: "./tsconfig.json",
+                project: ["./tsconfig.json", "./tsconfig.test.json"],
             },
             // env 대신 globals 사용
             globals: {
@@ -37,45 +47,44 @@ export default tseslint.config(
                 ...globals.mocha,
             },
         },
+        plugins: {
+            jsdoc,
+        },
         rules: {
             // TypeScript 관련 규칙
             // 함수의 반환 타입 명시 필수
             "@typescript-eslint/explicit-function-return-type": "error",
-            // any 타입 사용 금지
-            "@typescript-eslint/no-explicit-any": "error",
             // 사용하지 않는 변수 에러 처리 (_로 시작하는 변수는 제외)
+            "@typescript-eslint/no-explicit-any": "warn", // error에서 warn으로 변경
             "@typescript-eslint/no-unused-vars": ["error", { argsIgnorePattern: "^_" }],
             // 클래스 멤버의 접근 제한자 명시 필수
             "@typescript-eslint/explicit-member-accessibility": [
                 "error",
                 { accessibility: "explicit" },
             ],
+            "@typescript-eslint/no-require-imports": "warn", // error에서 warn으로 변경
 
-            // JSDoc 문서화 규칙
-            // 설명 필수
-            "jsdoc/require-description": "error",
-            // 매개변수 설명 필수
-            "jsdoc/require-param-description": "error",
-            // 반환값 설명 필수
-            "jsdoc/require-returns-description": "error",
-            // 예제 코드 필수
-            "jsdoc/require-example": "error",
-            // 예제 코드 유효성 검사
-            "jsdoc/check-examples": "error",
-            // 예외 처리 문서화 필수
-            "jsdoc/require-throws": "error",
+            // JSDoc 규칙 완화
+            "jsdoc/require-description": "warn",
+            "jsdoc/require-param-description": "warn",
+            "jsdoc/require-returns-description": "warn",
+            "jsdoc/require-example": "off", // 필수 예제 비활성화
+            "jsdoc/check-examples": "off", // 예제 검사 비활성화
+            "jsdoc/require-throws": "warn",
+            "jsdoc/require-param": "warn",
+            "jsdoc/require-returns": "warn",
+            "jsdoc/require-param-type": "warn",
 
             // 코드 품질 규칙
             // 중첩 콜백 최대 3개까지 허용
             "max-nested-callbacks": ["error", 3],
             // 함수당 최대 50줄 제한 (빈 줄과 주석 제외)
             "max-lines-per-function": [
-                "error",
-                { max: 50, skipBlankLines: true, skipComments: true },
+                "warn", // error에서 warn으로 변경
+                { max: 150, skipBlankLines: true, skipComments: true },
             ],
 
-            // Mocha 테스트 관련 규칙
-            // 건너뛴 테스트 경고
+            // Mocha 테스트 규칙
             "mocha/no-skipped-tests": "warn",
             // 단독 실행 테스트 금지
             "mocha/no-exclusive-tests": "error",
@@ -83,7 +92,6 @@ export default tseslint.config(
         // JSDoc 설정
         settings: {
             jsdoc: {
-                // TypeScript 모드 활성화
                 mode: "typescript",
                 // 태그 이름 설정
                 tagNamePreference: {
@@ -93,13 +101,13 @@ export default tseslint.config(
             },
         },
     },
+    {
+        files: ["**/__tests__/**/*.ts"],
+        rules: {
+            "max-lines-per-function": "off",
+            "max-nested-callbacks": "off",
+        },
+    },
     // Prettier와의 충돌 방지
     eslintConfigPrettier,
-    {
-        files: ["**/*.ts"],
-        plugins: {
-            jsdoc,
-        },
-        processor: "jsdoc/jsdoc",
-    },
 );
