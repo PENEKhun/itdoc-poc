@@ -29,12 +29,14 @@
     "scripts": {
         "build": "pnpm run clean && tsup",
         "clean": "rimraf build",
-        "format": "prettier --write \"lib/**/*.ts\"",
         "postinstall": "husky",
-        "lint": "eslint . --ext .ts",
+        "lint": "eslint ./lib",
         "prettier": "prettier \"{lib,__{tests}__}/**/*.{ts,mts}\" --config .prettierrc --write",
         "prettier:check": "prettier \"{lib,__{tests}__}/**/*.{ts,mts}\" --config .prettierrc --check",
-        "test": "mocha"
+        "test": "mocha",
+        "prepare": "husky",
+        "lint-staged": "lint-staged",
+        "ci": "pnpm run prettier:check && pnpm run lint && pnpm run test && pnpm run build"
     },
     "mocha": {
         "extensions": [
@@ -66,6 +68,7 @@
         "eslint-plugin-mocha": "^10.5.0",
         "globals": "~15.14",
         "husky": "^9.1.7",
+        "lint-staged": "^15.4.3",
         "prettier": "~3.4",
         "rimraf": "^6.0.1",
         "sort-package-json": "^2.15.1",
@@ -85,5 +88,14 @@
     "packageManager": "pnpm@10.5.2",
     "engines": {
         "node": ">=20 <21"
+    },
+    "lint-staged": {
+        "*.{ts,mts}": [
+            "prettier --config .prettierrc --write",
+            "eslint --fix"
+        ],
+        "*.{json,md}": [
+            "prettier --config .prettierrc --write"
+        ]
     }
 }
