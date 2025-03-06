@@ -2,10 +2,10 @@ import { TestFramework } from "./TestFramework";
 import { UserTestInterface } from "./UserTestInterface";
 
 export class MochaAdapter implements UserTestInterface {
-    name = TestFramework.Mocha; // 초기값이 필요해서 이렇게 함
+    public name = TestFramework.Mocha;
     private mochaGlobals: any;
 
-    constructor() {
+    public constructor() {
         this.mochaGlobals = {
             describe: global.describe,
             it: global.it,
@@ -28,42 +28,42 @@ export class MochaAdapter implements UserTestInterface {
         }
     }
 
-    describe(name: string, fn: () => void): void {
+    public describe(name: string, fn: () => void): void {
         if (!this.mochaGlobals.describe) {
             throw new Error("Mocha describe function is not available");
         }
         this.mochaGlobals.describe(name, fn);
     }
 
-    it(name: string, fn: () => void): void {
+    public it(name: string, fn: () => void): void {
         if (!this.mochaGlobals.it) {
             throw new Error("Mocha it function is not available");
         }
         this.mochaGlobals.it(name, fn);
     }
 
-    before(fn: () => void): void {
+    public before(fn: () => void): void {
         if (!this.mochaGlobals.before) {
             throw new Error("Mocha before function is not available");
         }
         this.mochaGlobals.before(fn);
     }
 
-    after(fn: () => void): void {
+    public after(fn: () => void): void {
         if (!this.mochaGlobals.after) {
             throw new Error("Mocha after function is not available");
         }
         this.mochaGlobals.after(fn);
     }
 
-    beforeEach(fn: () => void): void {
+    public beforeEach(fn: () => void): void {
         if (!this.mochaGlobals.beforeEach) {
             throw new Error("Mocha beforeEach function is not available");
         }
         this.mochaGlobals.beforeEach(fn);
     }
 
-    afterEach(fn: () => void): void {
+    public afterEach(fn: () => void): void {
         if (!this.mochaGlobals.afterEach) {
             throw new Error("Mocha afterEach function is not available");
         }

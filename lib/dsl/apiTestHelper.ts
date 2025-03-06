@@ -28,34 +28,34 @@ export class APITestBuilder {
     private readonly url: string;
     private readonly app: any;
 
-    constructor(defaults: APITestConfig = {}, method: HttpMethod, url: string, app: any) {
+    public constructor(defaults: APITestConfig = {}, method: HttpMethod, url: string, app: any) {
         this.config = { ...defaults };
         this.method = method;
         this.url = url;
         this.app = app;
     }
 
-    withPathParams(params: Record<string, DSLField<string | number>>): this {
+    public withPathParams(params: Record<string, DSLField<string | number>>): this {
         this.config.pathParams = params;
         return this;
     }
 
-    withQueryParams(params: Record<string, DSLField<string | number | boolean>>): this {
+    public withQueryParams(params: Record<string, DSLField<string | number | boolean>>): this {
         this.config.queryParams = params;
         return this;
     }
 
-    withRequestBody(body: Record<string, DSLField<any>>): this {
+    public withRequestBody(body: Record<string, DSLField<any>>): this {
         this.config.requestBody = body;
         return this;
     }
 
-    withRequestHeaders(headers: Record<string, DSLField<string>>): this {
+    public withRequestHeaders(headers: Record<string, DSLField<string>>): this {
         this.config.requestHeaders = headers;
         return this;
     }
 
-    withoutHeader(headerName: string): this {
+    public withoutHeader(headerName: string): this {
         if (this.config.requestHeaders && this.config.requestHeaders[headerName]) {
             delete this.config.requestHeaders[headerName];
         } else {
@@ -64,22 +64,22 @@ export class APITestBuilder {
         return this;
     }
 
-    expectStatus(status: HttpStatus | number): this {
+    public expectStatus(status: HttpStatus | number): this {
         this.config.expectedStatus = status;
         return this;
     }
 
-    expectResponseBody(body: Record<string, DSLField>): this {
+    public expectResponseBody(body: Record<string, DSLField>): this {
         this.config.expectedResponseBody = body;
         return this;
     }
 
-    withPrettyPrint(): this {
+    public withPrettyPrint(): this {
         this.config.prettyPrint = true;
         return this;
     }
 
-    async runTest(): Promise<Response> {
+    public async runTest(): Promise<Response> {
         if (!this.config.expectedStatus) {
             throw new Error("Expected status is required");
         }
@@ -194,7 +194,7 @@ export class APITestBuilder {
         }
     }
 
-    then<TResult1 = Response, TResult2 = never>(
+    public then<TResult1 = Response, TResult2 = never>(
         resolve?: ((value: Response) => TResult1 | PromiseLike<TResult1>) | null,
         reject?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null,
     ): Promise<TResult1 | TResult2> {

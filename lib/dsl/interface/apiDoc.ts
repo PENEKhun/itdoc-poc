@@ -5,19 +5,19 @@ import { APITestBuilder, APITestConfig } from "../apiTestHelper";
  * Describe API에 넘길 옵션 인터페이스
  */
 export class ApiDoc {
-    readonly method: HttpMethod;
-    readonly url: string;
-    readonly options: ApiDocOptions;
-    readonly app: unknown;
+    public readonly method: HttpMethod;
+    public readonly url: string;
+    public readonly options: ApiDocOptions;
+    public readonly app: unknown;
 
-    constructor(method: HttpMethod, url: string, options: ApiDocOptions, app: unknown) {
+    public constructor(method: HttpMethod, url: string, options: ApiDocOptions, app: unknown) {
         this.method = method;
         this.url = url;
         this.options = options;
         this.app = app;
     }
 
-    test(): APITestBuilder {
+    public test(): APITestBuilder {
         return new APITestBuilder(this.options.defaults, this.method, this.url, this.app);
     }
 }
