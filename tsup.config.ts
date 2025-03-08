@@ -47,10 +47,5 @@ export default defineConfig({
 
     // 항상 번들에 포함할 패키지
     // supports-color: 터미널 색상 지원을 위해 포함
-    noExternal: ["supports-color"],
-
-    // 환경 변수 설정
-    env: {
-        NODE_ENV: process.env.NODE_ENV || "development",
-    },
+    noExternal: ["supports-color"]
 });
