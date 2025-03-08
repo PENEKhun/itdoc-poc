@@ -1,5 +1,5 @@
 import app from '../expressApp.js';
-import { describeAPI, itDoc, HttpStatus, field, HttpMethod } from 'chilldocs';
+import { describeAPI, itDoc, HttpStatus, field, HttpMethod } from 'itdoc';
 
 const targetApp = app;
 

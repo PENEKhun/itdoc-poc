@@ -1,5 +1,5 @@
 {
-    "name": "chilldocs",
+    "name": "itdoc",
     "version": "0.0.0",
     "private": "true",
     "description": "POC",
@@ -36,7 +36,7 @@
         "prepare": "husky && husky install",
         "prettier": "prettier \"{lib,__{tests}__}/**/*.{ts,mts}\" --config .prettierrc --write",
         "prettier:check": "prettier \"{lib,__{tests}__}/**/*.{ts,mts}\" --config .prettierrc --check",
-        "test": "mocha"
+        "test": "mocha; pnpm --filter example-mocha-express test; pnpm --filter example-jest-express test"
     },
     "lint-staged": {
         "*.{ts,mts}": [

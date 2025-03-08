@@ -115,7 +115,7 @@ importers:
       babel-jest:
         specifier: ^29.7.0
         version: 29.7.0(@babel/core@7.26.9(supports-color@10.0.0))(supports-color@10.0.0)
-      chilldocs:
+      itdoc:
         specifier: workspace:*
         version: link:../..
       jest:
@@ -137,7 +137,7 @@ importers:
       '@types/node':
         specifier: ^20.11.24
         version: 20.17.24
-      chilldocs:
+      itdoc:
         specifier: workspace:*
         version: link:../..
       mocha:

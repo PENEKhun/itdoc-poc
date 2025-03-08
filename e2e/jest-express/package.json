@@ -12,7 +12,7 @@
         "@babel/core": "^7.24.0",
         "@babel/plugin-transform-modules-commonjs": "^7.24.0",
         "babel-jest": "^29.7.0",
-        "chilldocs": "workspace:*",
+        "itdoc": "workspace:*",
         "jest": "^29.7.0"
     }
 }

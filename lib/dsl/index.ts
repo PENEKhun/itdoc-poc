@@ -4,7 +4,7 @@
  * API 테스트 코드를 기반으로 문서를 자동 생성하는 라이브러리입니다.
  * @example
  * ```typescript
- * import { describeAPI, itDoc, HttpMethod } from 'chilldocs';
+ * import { describeAPI, itDoc, HttpMethod } from 'itdoc';
  *
  * describeAPI('User API', () => {
  *   itDoc('should create a user')
