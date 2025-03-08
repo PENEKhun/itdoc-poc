@@ -1,3 +1,6 @@
-# npm run lint 나중에 활성화 시키기
-npm run prettier
-sort-package-json "**/package.json"
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+npx sort-package-json $(git ls-files "**/package.json" | grep -v "node_modules/")
+
+pnpm run lint-staged

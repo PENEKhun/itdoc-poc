@@ -13,14 +13,14 @@ describeAPI(
   },
   targetApp,
   (apiDoc) => {
-    itDoc('회원가입 성공', async () => {
-      await apiDoc
+    itDoc('회원가입 성공', () => {
+      return apiDoc
         .test()
         .withRequestBody({
           username: field('아이디', 'penekhun'),
           password: field('패스워드', 'P@ssw0rd123!@#'),
         })
-        // .withPrettyPrint()
+        .withPrettyPrint()
         .expectStatus(HttpStatus.CREATED);
     });
 

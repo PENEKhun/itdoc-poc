@@ -13,16 +13,15 @@ describeAPI(
   },
   targetApp,
   (apiDoc) => {
-    itDoc('회원가입 성공', async () => {
-      await apiDoc
+    itDoc('회원가입 성공', () => apiDoc
         .test()
         .withRequestBody({
           username: field('아이디', 'penekhun'),
           password: field('패스워드', 'P@ssw0rd123!@#'),
         })
         // .withPrettyPrint()
-        .expectStatus(HttpStatus.CREATED);
-    });
+        .expectStatus(HttpStatus.CREATED)
+  );
 
     itDoc('아이디를 입력하지 않으면 회원가입 실패한다.', async () => {
       await apiDoc
@@ -33,7 +32,7 @@ describeAPI(
         .expectStatus(HttpStatus.BAD_REQUEST)
         .expectResponseBody({
           "error": field('에러 메세지', 'username is required')
-        });
+        })
     });
 
     itDoc('패스워드가 8자 이하면 회원가입 실패한다.', async () => {
@@ -46,7 +45,7 @@ describeAPI(
         .expectStatus(HttpStatus.BAD_REQUEST)
         .expectResponseBody({
           "error": field('에러 메세지', 'password must be at least 8 characters')
-        });
+        })
     });
   },
 );

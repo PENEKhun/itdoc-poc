@@ -1,6 +1,6 @@
-import { HttpMethod } from '../enums/HttpMethod';
-import { getTestAdapterExports } from '../adapters';
-import { ApiDoc, ApiDocOptions } from './apiDoc';
+import { HttpMethod } from "../enums/HttpMethod"
+import { getTestAdapterExports } from "../adapters"
+import { ApiDoc, ApiDocOptions } from "./ApiDoc"
 
 /**
  * API 명세를 위한 describe 함수
@@ -11,31 +11,31 @@ import { ApiDoc, ApiDocOptions } from './apiDoc';
  * @param callback API 테스트 함수
  */
 export const describeAPI = (
-  method: HttpMethod,
-  url: string,
-  options: ApiDocOptions,
-  app: unknown, // TODO: 이거 타입지정
-  callback: (apiDoc: ApiDoc) => void,
+    method: HttpMethod,
+    url: string,
+    options: ApiDocOptions,
+    app: unknown, // TODO: 이거 타입지정
+    callback: (apiDoc: ApiDoc) => void,
 ): void => {
-  if (!options.name) {
-    throw new Error('API 이름이 필요합니다.');
-  }
+    if (!options.name) {
+        throw new Error("API 이름이 필요합니다.")
+    }
 
-  if (!url.startsWith('/')) {
-    throw new Error('API URL은 /로 시작해야 합니다.');
-  }
+    if (!url.startsWith("/")) {
+        throw new Error("API URL은 /로 시작해야 합니다.")
+    }
 
-  if (!app) {
-    throw new Error('Express 앱 인스턴스가 필요합니다.');
-  }
+    if (!app) {
+        throw new Error("Express 앱 인스턴스가 필요합니다.")
+    }
 
-  if (!callback) {
-    throw new Error('API 테스트 함수가 필요합니다.');
-  }
+    if (!callback) {
+        throw new Error("API 테스트 함수가 필요합니다.")
+    }
 
-  const { describeCommon } = getTestAdapterExports();
-  describeCommon(`${options.name} | [${method}] ${url}`, () => {
-    const apiDoc = new ApiDoc(method, url, options, app);
-    callback(apiDoc);
-  });
-};
+    const { describeCommon } = getTestAdapterExports()
+    describeCommon(`${options.name} | [${method}] ${url}`, () => {
+        const apiDoc = new ApiDoc(method, url, options, app)
+        callback(apiDoc)
+    })
+}

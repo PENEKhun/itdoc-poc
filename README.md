@@ -2,20 +2,21 @@
 
 - [유스케이스](https://github.com/PENEKhun/itdoc-poc/blob/main/e2e)
 - [poc](https://github.com/PENEKhun/itdoc-poc/tree/main/lib)
+
 ## test?
 
 ```bash
 # install
-npm install
+pnpm install
 
 # build
-npm run build
+pnpm build
 
 # run usecase (with mocha environment)
-npm --prefix ./e2e/mocha-express run test
+pnpm --filter example-mocha-express test
 
 # run usecase (with jest environment)
-npm --prefix ./e2e/jest-express run test
+pnpm --filter example-jest-express test
 ```
 
 
