@@ -9,7 +9,6 @@ import { HttpStatus } from "./enums/HttpStatus";
 import supertest, { Response } from "supertest";
 import { DSLField } from "./interface/field";
 import { validateResponse } from "./validateResponse";
-import { PrettyPrint } from "./Prettyprint";
 
 export type PATH_PARAM_TYPES = string | number;
 export type QUERY_PARAM_TYPES = string | number | boolean;
@@ -28,14 +27,12 @@ export class APITestBuilder {
     private readonly method: HttpMethod;
     private readonly url: string;
     private readonly app: any;
-    private readonly printer: PrettyPrint;
 
     public constructor(defaults: APITestConfig = {}, method: HttpMethod, url: string, app: any) {
         this.config = { ...defaults };
         this.method = method;
         this.url = url;
         this.app = app;
-        this.printer = new PrettyPrint();
     }
 
     public withPathParams(params: Record<string, DSLField<string | number>>): this {
@@ -166,26 +163,32 @@ export class APITestBuilder {
         try {
             const res = await req;
             if (this.config.prettyPrint) {
-                this.printer.printRequest(
-                    this.method,
-                    finalUrl,
-                    this.config.requestHeaders,
-                    this.config.queryParams,
-                    this.config.requestBody,
-                );
-                this.printer.printResponse(res.status, res.body);
+                console.log("=== API TEST REQUEST ===");
+                console.log("Method:", this.method);
+                console.log("URL:", finalUrl);
+                console.log("Headers:", JSON.stringify(this.config.requestHeaders, null, 2));
+                console.log("Query Params:", JSON.stringify(this.config.queryParams, null, 2));
+                console.log("Request Body:", JSON.stringify(this.config.requestBody, null, 2));
+                console.log("=== API TEST RESPONSE ===");
+                console.log("Status:", res.status);
+                console.log("Response Body:", JSON.stringify(res.body, null, 2));
             }
             return res;
         } catch (error: any) {
             if (this.config.prettyPrint) {
-                this.printer.printRequest(
-                    this.method,
-                    finalUrl,
-                    this.config.requestHeaders,
-                    this.config.queryParams,
-                    this.config.requestBody,
-                );
-                this.printer.printError(error);
+                console.log("=== API TEST REQUEST (on Error) ===");
+                console.log("Method:", this.method);
+                console.log("URL:", finalUrl);
+                console.log("Headers:", JSON.stringify(this.config.requestHeaders, null, 2));
+                console.log("Query Params:", JSON.stringify(this.config.queryParams, null, 2));
+                console.log("Request Body:", JSON.stringify(this.config.requestBody, null, 2));
+                if (error.response) {
+                    console.log("=== API TEST RESPONSE (Error) ===");
+                    console.log("Status:", error.response.status);
+                    console.log("Response Body:", JSON.stringify(error.response.body, null, 2));
+                } else {
+                    console.log("Error Message:", error.message);
+                }
             }
             throw error;
         }
