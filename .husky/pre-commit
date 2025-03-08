@@ -1,8 +1,4 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-# 스테이징된 파일만 린트 및 포맷 검사
-pnpm run lint-staged
-
-# 빌드 실행
-pnpm run build
+npm test
