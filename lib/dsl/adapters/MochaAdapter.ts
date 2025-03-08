@@ -1,9 +1,9 @@
-import { TestFramework } from "./TestFramework";
-import { UserTestInterface } from "./UserTestInterface";
+import { TestFramework } from "./TestFramework"
+import { UserTestInterface } from "./UserTestInterface"
 
 export class MochaAdapter implements UserTestInterface {
-    public name = TestFramework.Mocha;
-    private mochaGlobals: any;
+    public name = TestFramework.Mocha
+    private mochaGlobals: any
 
     public constructor() {
         this.mochaGlobals = {
@@ -13,10 +13,10 @@ export class MochaAdapter implements UserTestInterface {
             after: global.after,
             beforeEach: global.beforeEach,
             afterEach: global.afterEach,
-        };
+        }
 
         if (!this.mochaGlobals.describe) {
-            const mocha = require("mocha");
+            const mocha = require("mocha")
             this.mochaGlobals = {
                 describe: mocha.describe,
                 it: mocha.it,
@@ -24,49 +24,49 @@ export class MochaAdapter implements UserTestInterface {
                 after: mocha.after,
                 beforeEach: mocha.beforeEach,
                 afterEach: mocha.afterEach,
-            };
+            }
         }
     }
 
     public describe(name: string, fn: () => void): void {
         if (!this.mochaGlobals.describe) {
-            throw new Error("Mocha describe function is not available");
+            throw new Error("Mocha describe function is not available")
         }
-        this.mochaGlobals.describe(name, fn);
+        this.mochaGlobals.describe(name, fn)
     }
 
     public it(name: string, fn: () => void): void {
         if (!this.mochaGlobals.it) {
-            throw new Error("Mocha it function is not available");
+            throw new Error("Mocha it function is not available")
         }
-        this.mochaGlobals.it(name, fn);
+        this.mochaGlobals.it(name, fn)
     }
 
     public before(fn: () => void): void {
         if (!this.mochaGlobals.before) {
-            throw new Error("Mocha before function is not available");
+            throw new Error("Mocha before function is not available")
         }
-        this.mochaGlobals.before(fn);
+        this.mochaGlobals.before(fn)
     }
 
     public after(fn: () => void): void {
         if (!this.mochaGlobals.after) {
-            throw new Error("Mocha after function is not available");
+            throw new Error("Mocha after function is not available")
         }
-        this.mochaGlobals.after(fn);
+        this.mochaGlobals.after(fn)
     }
 
     public beforeEach(fn: () => void): void {
         if (!this.mochaGlobals.beforeEach) {
-            throw new Error("Mocha beforeEach function is not available");
+            throw new Error("Mocha beforeEach function is not available")
         }
-        this.mochaGlobals.beforeEach(fn);
+        this.mochaGlobals.beforeEach(fn)
     }
 
     public afterEach(fn: () => void): void {
         if (!this.mochaGlobals.afterEach) {
-            throw new Error("Mocha afterEach function is not available");
+            throw new Error("Mocha afterEach function is not available")
         }
-        this.mochaGlobals.afterEach(fn);
+        this.mochaGlobals.afterEach(fn)
     }
 }

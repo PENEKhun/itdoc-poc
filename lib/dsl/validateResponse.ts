@@ -1,6 +1,7 @@
 /**
  * DSL Field 타입 가드
  * @description
+ * @param obj
  * 값이 DSL Field 타입인지 확인합니다.
  * @param value - 검사할 값
  * @returns DSL Field 여부
@@ -12,7 +13,7 @@
  * ```
  */
 const isDSLField = (obj: any): boolean =>
-    obj && typeof obj === "object" && "example" in obj && "description" in obj;
+    obj && typeof obj === "object" && "example" in obj && "description" in obj
 
 /**
  * DSL Field 값을 검증하는 함수
@@ -21,6 +22,8 @@ const isDSLField = (obj: any): boolean =>
  * @param field - DSL Field 객체
  * @param field.example
  * @param actual - 실제 값
+ * @param actualVal
+ * @param expectedDSL
  * @param path - 현재 검증 중인 경로
  * @throws {Error} 검증 실패 시 에러를 발생시킵니다.
  * @example
@@ -32,18 +35,18 @@ const isDSLField = (obj: any): boolean =>
 const validateDSLField = (expectedDSL: any, actualVal: any, path: string): void => {
     // DSL Field의 example이 함수인 경우
     if (typeof expectedDSL.example === "function") {
-        expectedDSL.example(actualVal);
-        return;
+        expectedDSL.example(actualVal)
+        return
     }
 
     // DSL Field의 example이 객체인 경우
     if (expectedDSL.example && typeof expectedDSL.example === "object") {
         if (isDSLField(actualVal)) {
-            validateResponse(expectedDSL.example, actualVal.example, path);
+            validateResponse(expectedDSL.example, actualVal.example, path)
         } else {
-            validateResponse(expectedDSL.example, actualVal, path);
+            validateResponse(expectedDSL.example, actualVal, path)
         }
-        return;
+        return
     }
 
     // DSL Field의 example이 원시값인 경우
@@ -51,14 +54,14 @@ const validateDSLField = (expectedDSL: any, actualVal: any, path: string): void 
         if (actualVal.example !== expectedDSL.example) {
             throw new Error(
                 `Expected response body[${path}].example to be ${expectedDSL.example} but got ${actualVal.example}`,
-            );
+            )
         }
     } else if (actualVal !== expectedDSL.example) {
         throw new Error(
             `Expected response body[${path}] to be ${expectedDSL.example} but got ${actualVal}`,
-        );
+        )
     }
-};
+}
 
 /**
  * 배열 타입의 응답을 검증하는 함수
@@ -66,6 +69,8 @@ const validateDSLField = (expectedDSL: any, actualVal: any, path: string): void 
  * 배열의 길이와 각 요소를 순서대로 비교합니다.
  * @param expected - 예상되는 배열
  * @param actual - 실제 응답 값
+ * @param actualArr
+ * @param expectedArr
  * @param path - 현재 검증 중인 객체 경로
  * @throws {Error} 검증 실패 시 에러를 발생시킵니다.
  * @example
@@ -77,17 +82,17 @@ const validateDSLField = (expectedDSL: any, actualVal: any, path: string): void 
  */
 const validateArray = (expectedArr: any[], actualArr: any[], path: string): void => {
     if (!Array.isArray(actualArr)) {
-        throw new Error(`Expected response body[${path}] to be an array but got ${actualArr}`);
+        throw new Error(`Expected response body[${path}] to be an array but got ${actualArr}`)
     }
     if (expectedArr.length !== actualArr.length) {
         throw new Error(
             `Expected response body[${path}] to have length ${expectedArr.length} but got ${actualArr.length}`,
-        );
+        )
     }
     expectedArr.forEach((elem, index) => {
-        validateResponse(elem, actualArr[index], `${path}[${index}]`);
-    });
-};
+        validateResponse(elem, actualArr[index], `${path}[${index}]`)
+    })
+}
 
 /**
  * 응답 객체의 구조와 값을 검증하는 함수
@@ -96,6 +101,8 @@ const validateArray = (expectedArr: any[], actualArr: any[], path: string): void
  * 배열, 객체, 기본 타입에 대한 검증을 수행하며, DSL Field도 지원합니다.
  * @param expectedObj - 예상되는 응답 객체
  * @param actualObj - 실제 응답 객체
+ * @param actual
+ * @param expected
  * @param path - 현재 검증 중인 객체 경로 (기본값: '')
  * @throws {Error} 검증 실패 시 에러를 발생시킵니다.
  * @example
@@ -113,39 +120,39 @@ const validateArray = (expectedArr: any[], actualArr: any[], path: string): void
 export const validateResponse = (expected: any, actual: any, path: string = ""): void => {
     // 배열인 경우
     if (Array.isArray(expected)) {
-        validateArray(expected, actual, path);
-        return;
+        validateArray(expected, actual, path)
+        return
     }
 
     // 객체인 경우
     if (expected && typeof expected === "object") {
         for (const key in expected) {
-            const currentPath = path ? `${path}.${key}` : key;
-            const expectedVal = expected[key];
-            const actualVal = actual ? actual[key] : undefined;
+            const currentPath = path ? `${path}.${key}` : key
+            const expectedVal = expected[key]
+            const actualVal = actual ? actual[key] : undefined
 
             if (isDSLField(expectedVal)) {
-                validateDSLField(expectedVal, actualVal, currentPath);
+                validateDSLField(expectedVal, actualVal, currentPath)
             } else if (Array.isArray(expectedVal)) {
-                validateArray(expectedVal, actualVal, currentPath);
+                validateArray(expectedVal, actualVal, currentPath)
             } else if (expectedVal && typeof expectedVal === "object") {
                 if (!actualVal || typeof actualVal !== "object") {
                     throw new Error(
                         `Expected response body[${currentPath}] to be an object but got ${actualVal}`,
-                    );
+                    )
                 }
-                validateResponse(expectedVal, actualVal, currentPath);
+                validateResponse(expectedVal, actualVal, currentPath)
             } else if (actualVal !== expectedVal) {
                 throw new Error(
                     `Expected response body[${currentPath}] to be ${expectedVal} but got ${actualVal}`,
-                );
+                )
             }
         }
-        return;
+        return
     }
 
     // 원시 타입인 경우 직접 비교
     if (actual !== expected) {
-        throw new Error(`Expected response body[${path}] to be ${expected} but got ${actual}`);
+        throw new Error(`Expected response body[${path}] to be ${expected} but got ${actual}`)
     }
-};
+}

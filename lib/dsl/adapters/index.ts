@@ -1,6 +1,6 @@
-import { MochaAdapter } from "./MochaAdapter";
-import { TestFramework } from "./TestFramework";
-import type { UserTestInterface } from "./UserTestInterface";
+import { MochaAdapter } from "./MochaAdapter"
+import { TestFramework } from "./TestFramework"
+import type { UserTestInterface } from "./UserTestInterface"
 
 /**
  * 테스트 프레임워크를 감지하는 동기 함수
@@ -8,33 +8,33 @@ import type { UserTestInterface } from "./UserTestInterface";
 function detectTestFramework(): TestFramework {
     // Mocha 환경인지 확인하기 위해 전역 Mocha 함수들의 존재 여부를 검사
     if (typeof global.describe === "function" && typeof global.it === "function") {
-        return TestFramework.Mocha;
+        return TestFramework.Mocha
     }
 
     // Jest 감지 (기존 로직 유지)
     if (typeof (global as any).jest !== "undefined") {
-        return TestFramework.Jest;
+        return TestFramework.Jest
     }
     if (
         typeof (global as any).expect === "function" &&
         typeof (global as any).expect(1).toBe === "function"
     ) {
-        return TestFramework.Jest;
+        return TestFramework.Jest
     }
 
     // 마지막으로 process.argv에서 mocha 문자열을 찾아 Mocha 환경인지 확인
     if (process.argv.some((arg) => arg.toLowerCase().includes("mocha"))) {
-        return TestFramework.Mocha;
+        return TestFramework.Mocha
     }
 
-    return TestFramework.Unknown;
+    return TestFramework.Unknown
 }
 
 /**
  * 동기 방식으로 어댑터를 초기화하는 함수
  */
 function initializeAdapterSync(): UserTestInterface {
-    const framework = detectTestFramework();
+    const framework = detectTestFramework()
 
     switch (framework) {
         case TestFramework.Jest: {
@@ -43,13 +43,13 @@ function initializeAdapterSync(): UserTestInterface {
             그렇지 않으면 "Do not import `@jest/globals` outside of the Jest test environment"
             에러가 발생하게 됩니다.
             */
-            const { JestAdapter } = require("./JestAdapter.js");
-            return new JestAdapter();
+            const { JestAdapter } = require("./JestAdapter.js")
+            return new JestAdapter()
         }
         case TestFramework.Mocha:
-            return new MochaAdapter();
+            return new MochaAdapter()
         default:
-            throw new Error("지원하지 않는 테스트 프레임워크입니다.");
+            throw new Error("지원하지 않는 테스트 프레임워크입니다.")
     }
 }
 
@@ -65,15 +65,15 @@ function initializeAdapterSync(): UserTestInterface {
  * @property {Function} afterEachCommon 각 테스트 후에 실행되는 함수
  */
 export function getTestAdapterExports(): {
-    describeCommon: (name: string, fn: () => void) => void;
-    itCommon: (name: string, fn: () => void) => void;
-    beforeCommon: (fn: () => void) => void;
-    afterCommon: (fn: () => void) => void;
-    beforeEachCommon: (fn: () => void) => void;
-    afterEachCommon: (fn: () => void) => void;
+    describeCommon: (name: string, fn: () => void) => void
+    itCommon: (name: string, fn: () => void) => void
+    beforeCommon: (fn: () => void) => void
+    afterCommon: (fn: () => void) => void
+    beforeEachCommon: (fn: () => void) => void
+    afterEachCommon: (fn: () => void) => void
 } {
     // 실제 어댑터 객체를 동기적으로 반환 (Promise가 아님)
-    const adapter = initializeAdapterSync();
+    const adapter = initializeAdapterSync()
     return {
         describeCommon: adapter.describe.bind(adapter),
         itCommon: adapter.it.bind(adapter),
@@ -81,5 +81,5 @@ export function getTestAdapterExports(): {
         afterCommon: adapter.after.bind(adapter),
         beforeEachCommon: adapter.beforeEach.bind(adapter),
         afterEachCommon: adapter.afterEach.bind(adapter),
-    };
+    }
 }
