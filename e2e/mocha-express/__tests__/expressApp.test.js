@@ -26,11 +26,6 @@ describeAPI(
     itDoc('아이디를 입력하지 않으면 회원가입 실패한다.', async () => {
       await apiDoc
         .test()
-        .with()
-        .reqbody()
-        .expect()
-        .status()
-        .resbody()
         .withRequestBody({
           password: field('패스워드', 'P@ssw0rd123!@#'),
         })
