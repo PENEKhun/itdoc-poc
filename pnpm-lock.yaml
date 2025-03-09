@@ -54,6 +54,9 @@ importers:
       eslint-plugin-jsdoc:
         specifier: ^50.6.0
         version: 50.6.3(eslint@9.17.0(supports-color@10.0.0))(supports-color@10.0.0)
+      eslint-plugin-license-header:
+        specifier: ^0.8.0
+        version: 0.8.0
       eslint-plugin-mocha:
         specifier: ^10.5.0
         version: 10.5.0(eslint@9.17.0(supports-color@10.0.0))
@@ -100,7 +103,7 @@ importers:
         specifier: ~8.19
         version: 8.19.1(eslint@9.17.0(supports-color@10.0.0))(supports-color@10.0.0)(typescript@5.7.3)
 
-  e2e/jest-express:
+  examples/jest-express:
     dependencies:
       express:
         specifier: ^4.19.2
@@ -122,7 +125,7 @@ importers:
         specifier: ^29.7.0
         version: 29.7.0(@types/node@20.17.24)(supports-color@10.0.0)(ts-node@10.9.2(@types/node@20.17.24)(typescript@5.7.3))
 
-  e2e/mocha-express:
+  examples/mocha-express:
     dependencies:
       express:
         specifier: ^4.19.2
@@ -1422,6 +1425,9 @@ packages:
     peerDependencies:
       eslint: ^7.0.0 || ^8.0.0 || ^9.0.0
 
+  eslint-plugin-license-header@0.8.0:
+    resolution: {integrity: sha512-khTCz6G3JdoQfwrtY4XKl98KW4PpnWUKuFx8v+twIRhJADEyYglMDC0td8It75C1MZ88gcvMusWuUlJsos7gYg==}
+
   eslint-plugin-mocha@10.5.0:
     resolution: {integrity: sha512-F2ALmQVPT1GoP27O1JTZGrV9Pqg8k79OeIuvw63UxMtQKREZtmkK1NFgkZQ2TW7L2JSSFKHFPTtHu5z8R9QNRw==}
     engines: {node: '>=14.0.0'}
@@ -2465,6 +2471,10 @@ packages:
   require-directory@2.1.1:
     resolution: {integrity: sha512-fGxEI7+wsG9xrvdjsrlmL22OMTTiHRwAMroiEeMgq8gzoLC/PQr7RsRDSTLUg/bZAZtF+TVIkHc6/4RIKrui+Q==}
     engines: {node: '>=0.10.0'}
+
+  requireindex@1.2.0:
+    resolution: {integrity: sha512-L9jEkOi3ASd9PYit2cwRfyppc9NoABujTP8/5gFcbERmo5jUoAKovIC3fsF17pkTnGsrByysqX+Kxd2OTNI1ww==}
+    engines: {node: '>=0.10.5'}
 
   resolve-cwd@3.0.0:
     resolution: {integrity: sha512-OrZaX2Mb+rJCpH/6CpSqt9xFVpN++x01XnN2ie9g6P5/3xelLAkXWVADpdz1IHD/KFfEXyE6V0U01OQ3UO2rEg==}
@@ -4296,6 +4306,10 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
+  eslint-plugin-license-header@0.8.0:
+    dependencies:
+      requireindex: 1.2.0
+
   eslint-plugin-mocha@10.5.0(eslint@9.17.0(supports-color@10.0.0)):
     dependencies:
       eslint: 9.17.0(supports-color@10.0.0)
@@ -5537,6 +5551,8 @@ snapshots:
   readdirp@4.1.2: {}
 
   require-directory@2.1.1: {}
+
+  requireindex@1.2.0: {}
 
   resolve-cwd@3.0.0:
     dependencies:

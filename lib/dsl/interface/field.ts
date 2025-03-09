@@ -1,3 +1,19 @@
+/*
+ * Copyright 2025 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 export type FIELD_TYPES =
     | string
     | number
@@ -18,8 +34,8 @@ export interface DSLField<T extends FIELD_TYPES = FIELD_TYPES> {
 /**
  * DSL Helper Functions
  * - DSLField 생성 함수
- * @param description
- * @param example
+ * @param description {string} 문서에 표시될 필드 설명
+ * @param example {object | function} 필드의 예시 값 또는 검증 함수
  */
 export const field = <T extends FIELD_TYPES>(
     description: string,

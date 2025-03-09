@@ -1,14 +1,30 @@
+/*
+ * Copyright 2025 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 function getCdocprompt(content) {
-    return ` 
+    return `
     다음의 테스트내용을 기반으로 다음의 인터페이스를 갖춘 함수를 출력해주세요. 오로지 자바스크립트파일로만 떨어져야 하며 코드에 대한 설명은 하지 않습니다.
     테스트내용:
     ${content}
     인터페이스:
      - 테스트 함수: describeAPI는 API 문서 및 테스트 케이스를 정의하는 함수입니다.
      - 테스트 케이스 함수: itDoc은 각 세부 테스트 시나리오를 기술하며, 테스트 실행을 위한 설정을 포함합니다.
-     - 테스트 실행: 각 테스트는 apiDoc.test()를 통해 실행되며, 메서드체이닝으로 withRequestBody()와 expectStatus()로 요청본문과 응답상태값 등을 수행합니다.  
-    
-    함수예시:  
+     - 테스트 실행: 각 테스트는 apiDoc.test()를 통해 실행되며, 메서드체이닝으로 withRequestBody()와 expectStatus()로 요청본문과 응답상태값 등을 수행합니다.
+
+    함수예시:
     describeAPI(
       HttpMethod.POST,
       '/signup',
@@ -91,9 +107,8 @@ function getCdocprompt(content) {
             .expectStatus(HttpStatus.NOT_FOUND);
         });
       }
-    ); 
+    );
 `
 }
-  
-module.exports = { getCdocprompt };
-  
+
+export default getCdocprompt;

@@ -21,11 +21,6 @@
     "main": "build/index.cjs",
     "module": "build/index.js",
     "types": "build/index.d.ts",
-    "workspaces": [
-        "lib",
-        "examples/*",
-        "e2e/*"
-    ],
     "scripts": {
         "build": "pnpm run clean && tsup",
         "ci": "pnpm run prettier:check && pnpm run lint && pnpm run test && pnpm run build",
@@ -88,7 +83,8 @@
         "tsx": "^4.19.3",
         "typedoc": "^0.27.9",
         "typescript": "~5.7",
-        "typescript-eslint": "~8.19"
+        "typescript-eslint": "~8.19",
+        "eslint-plugin-license-header": "^0.8.0"
     },
     "peerDependencies": {
         "jest": "^29.0.0",

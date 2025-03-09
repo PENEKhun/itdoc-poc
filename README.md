@@ -27,11 +27,11 @@ pnpm --filter example-jest-express test
 
     - [x] 사용자가 mocha 환경일 때
 
-        - ` npm --prefix ./e2e/mocha-express run test`
+        - `pnpm --filter example-mocha-express test`
         - <img width="964" alt="image" src="https://github.com/user-attachments/assets/88f5a9cd-d6fb-4b6f-9d88-39f1c672808d" />
 
     - [x] 사용자가 jest 환경일 때
-        - `npm --prefix ./e2e/jest-express run test`
+        - `pnpm --filter example-jest-express test`
         - <img width="975" alt="image" src="https://github.com/user-attachments/assets/e37bed75-aaa3-43e4-8206-771ee400bb27" />
 
 - [ ] 코드 깔끔하게 정리
@@ -47,7 +47,7 @@ pnpm --filter example-jest-express test
         })
         ```
 - [ ] IDE에서 제공된 힌트 정정
-- [ ] e2e 경로에서 스냅샷 테스트를 사용할 수 있도록 ??
+- [ ] examples 경로에서 스냅샷 테스트를 사용할 수 있도록 ??
     - example :
       https://github.com/PENEKhun/itdoc-poc/blob/main/e2e/mocha-express/__tests__/__snapshots__/expressApp.usecase.snapshot
     - 흠 근데 굳이 해야되나? 고민된다!
