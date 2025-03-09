@@ -1,70 +1,82 @@
 # itdoc
 
-- [유스케이스](https://github.com/PENEKhun/itdoc-poc/blob/main/e2e)
-- [poc](https://github.com/PENEKhun/itdoc-poc/tree/main/lib)
+> ⚠️ 아직은 개발 중인 프로젝트 입니다. 당장은 사용하실 수 없습니다.
 
-## test?
+## Overview
 
-```bash
-# install
-pnpm install
+이 프로젝트의 주된 목표는 javascript 진영에서 작성된 `RESTful` 웹 서비스의 문서를 **신뢰성 있게**
+작성할 수 있도록 돕는 것입니다. 일반적으로 `JSON` 또는 `JSDoc` 기반 API 문서화와 달리, **itdoc**는
+실제 테스트 코드에서 요청·응답 예시를 추출합니다. 테스트가 실패하면 문서가 생성되지 않으므로, 항상
+검증된 최신 API 정보만 문서화할 수 있습니다.
 
-# build
-pnpm build
+[Spring REST Docs]가 테스트케이스에 명시된 예시를 `Asciidoctor`와 결합해 문서를 만드는 것처럼,
+`itdoc`도 사용자가 작성한 설명과 테스트 결과를 합쳐 문서를 생성해 줍니다.
 
-# run usecase (with mocha environment)
-pnpm --filter example-mocha-express test
+테스트 기반 문서화는 언제나 실제 동작하는 API를 반영하므로, 테스트가 통과하기만 하면 [OpenAPI
+Specification], Markdown, HTML 형식 등으로 문서를 내보낼 수 있습니다. 필요한 형식으로 유연하게
+배포해보세요.
 
-# run usecase (with jest environment)
-pnpm --filter example-jest-express test
-```
+[Spring REST Docs]: https://spring.io/projects/spring-restdocs
+[OpenAPI Specification]: https://swagger.io/specification/
 
-# TODO
+## Example
 
-- 빌드 테스트
+```javascript
+import { describeAPI, itDoc, HttpStatus, field, HttpMethod } from "itdoc"
 
-- 테스트 프레임워크 호환성
+const targetApp = app
 
-    - [x] 사용자가 mocha 환경일 때
+describeAPI(
+    HttpMethod.POST,
+    "/signup",
+    {
+        name: "회원가입 API",
+        tag: "Auth",
+        summary: "사용자로 부터 아이디와 패스워드를 받아 회원가입을 수행합니다.",
+    },
+    targetApp,
+    (apiDoc) => {
+        itDoc("회원가입 성공", () =>
+            apiDoc
+                .test()
+                .withRequestBody({
+                    username: field("아이디", "penekhun"),
+                    password: field("패스워드", "P@ssw0rd123!@#"),
+                })
+                // .withPrettyPrint()
+                .expectStatus(HttpStatus.CREATED),
+        )
 
-        - `pnpm --filter example-mocha-express test`
-        - <img width="964" alt="image" src="https://github.com/user-attachments/assets/88f5a9cd-d6fb-4b6f-9d88-39f1c672808d" />
-
-    - [x] 사용자가 jest 환경일 때
-        - `pnpm --filter example-jest-express test`
-        - <img width="975" alt="image" src="https://github.com/user-attachments/assets/e37bed75-aaa3-43e4-8206-771ee400bb27" />
-
-- [ ] 코드 깔끔하게 정리
-- [ ] 구현되지 않은 기능 확인
-- [ ] Factory 적용 see - https://github.com/PENEKhun/itdoc-poc/issues/3
-- [ ] `./lib` 유닛 테스트
-- [ ] 응답 데이터 구조 정의 추가
-    - example
-        ```ts
-        .expectResponseBody({
-            userId: field('유효한 사용자 ID', 'penek'),
-            friendId: field('유효한 친구 ID', 'zagabi'),
+        itDoc("아이디를 입력하지 않으면 회원가입 실패한다.", async () => {
+            await apiDoc
+                .test()
+                .withRequestBody({
+                    password: field("패스워드", "P@ssw0rd123!@#"),
+                })
+                .expectStatus(HttpStatus.BAD_REQUEST)
+                .expectResponseBody({
+                    error: field("에러 메세지", "username is required"),
+                })
         })
-        ```
-- [ ] IDE에서 제공된 힌트 정정
-- [ ] examples 경로에서 스냅샷 테스트를 사용할 수 있도록 ??
-    - example :
-      https://github.com/PENEKhun/itdoc-poc/blob/main/e2e/mocha-express/__tests__/__snapshots__/expressApp.usecase.snapshot
-    - 흠 근데 굳이 해야되나? 고민된다!
 
-# script
-
-## install
-
-1. .env 생성 :: env.example 참고
-2. npm install -g redoc-cli widdershins
-3. script/oas 폴더내의 openapi.yaml 생성
-4. script/llm/index.js 수정(이부분에 대한 인터페이스는 추후 cdoc완성 후 cdoc 메서드 체이닝으로 부를
-   수 있게 설정할 예정)
-
-## exec
-
+        itDoc("패스워드가 8자 이하면 회원가입 실패한다.", async () => {
+            await apiDoc
+                .test()
+                .withRequestBody({
+                    username: field("아이디", "penekhun"),
+                    password: field("패스워드", "1234567"),
+                })
+                .expectStatus(HttpStatus.BAD_REQUEST)
+                .expectResponseBody({
+                    error: field("에러 메세지", "password must be at least 8 characters"),
+                })
+        })
+    },
+)
 ```
-node script/llm/index.js
-node script/makedocs/index.mjs
-```
+
+## License
+
+해당 프로젝트는 [Apache 2.0] 라이센스에 따라 배포됩니다.
+
+[Apache 2.0]: LICENSE.txt
