@@ -27,6 +27,7 @@ import { validateResponse } from "./validateResponse"
 
 export type PATH_PARAM_TYPES = string | number
 export type QUERY_PARAM_TYPES = string | number | boolean
+
 export interface APITestConfig {
     pathParams?: Record<string, DSLField<PATH_PARAM_TYPES>>
     queryParams?: Record<string, DSLField<QUERY_PARAM_TYPES>>
@@ -178,32 +179,29 @@ export class APITestBuilder {
         try {
             const res = await req
             if (this.config.prettyPrint) {
-                console.log("=== API TEST REQUEST ===")
-                console.log("Method:", this.method)
-                console.log("URL:", finalUrl)
-                console.log("Headers:", JSON.stringify(this.config.requestHeaders, null, 2))
-                console.log("Query Params:", JSON.stringify(this.config.queryParams, null, 2))
-                console.log("Request Body:", JSON.stringify(this.config.requestBody, null, 2))
-                console.log("=== API TEST RESPONSE ===")
-                console.log("Status:", res.status)
-                console.log("Response Body:", JSON.stringify(res.body, null, 2))
+                console.log(`=== API TEST REQUEST ===
+              Method: ${this.method}
+              URL: ${finalUrl}
+              Headers: ${JSON.stringify(this.config.requestHeaders, null, 2)}
+              Query Params: ${JSON.stringify(this.config.queryParams, null, 2)}
+              Request Body: ${JSON.stringify(this.config.requestBody, null, 2)}
+              === API TEST RESPONSE ===
+              Status: ${res.status}
+              Response Body: ${JSON.stringify(res.body, null, 2)}
+              `)
             }
             return res
         } catch (error: any) {
             if (this.config.prettyPrint) {
-                console.log("=== API TEST REQUEST (on Error) ===")
-                console.log("Method:", this.method)
-                console.log("URL:", finalUrl)
-                console.log("Headers:", JSON.stringify(this.config.requestHeaders, null, 2))
-                console.log("Query Params:", JSON.stringify(this.config.queryParams, null, 2))
-                console.log("Request Body:", JSON.stringify(this.config.requestBody, null, 2))
-                if (error.response) {
-                    console.log("=== API TEST RESPONSE (Error) ===")
-                    console.log("Status:", error.response.status)
-                    console.log("Response Body:", JSON.stringify(error.response.body, null, 2))
-                } else {
-                    console.log("Error Message:", error.message)
-                }
+                console.log(`=== API TEST REQUEST (on Error) ===
+              Method: ${this.method}
+              URL: ${finalUrl}
+              Headers: ${JSON.stringify(this.config.requestHeaders, null, 2)}
+              Query Params: ${JSON.stringify(this.config.queryParams, null, 2)}
+              Request Body: ${JSON.stringify(this.config.requestBody, null, 2)}
+              === API TEST RESPONSE (Error) ===
+              ${error.response ? error.response : error.message}
+              `)
             }
             throw error
         }
