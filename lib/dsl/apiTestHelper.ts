@@ -20,10 +20,9 @@
  * API 테스트를 쉽게 구성하고 실행할 수 있도록 도와주는 빌더 패턴 기반의 헬퍼 클래스입니다.
  */
 
-import { HttpMethod } from "./enums/HttpMethod"
-import { HttpStatus } from "./enums/HttpStatus"
+import { HttpMethod, HttpStatus } from "./enums"
 import supertest, { Response } from "supertest"
-import { DSLField } from "./interface/field"
+import { DSLField } from "./interface"
 import { validateResponse } from "./validateResponse"
 
 export type PATH_PARAM_TYPES = string | number

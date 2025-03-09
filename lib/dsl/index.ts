@@ -25,7 +25,7 @@
  * describeAPI('User API', () => {
  *   itDoc('should create a user')
  *     .method(HttpMethod.POST)
- *     .path('/users')
+ *     .path("/users")
  *     .expect(201);
  * });
  * ```
@@ -33,7 +33,5 @@
 
 export { HttpMethod } from "./enums/HttpMethod"
 export { HttpStatus } from "./enums/HttpStatus"
-export { describeAPI } from "./interface/describeAPI"
-export { itDoc } from "./interface/itDoc"
-export { field } from "./interface/field"
+export { describeAPI, itDoc, field } from "./interface"
 export type { ApiDocOptions } from "./interface/ApiDoc"

@@ -15,8 +15,8 @@
  */
 
 import { expect } from "chai"
-import { validateResponse } from "../../../dsl/validateResponse.ts"
-import { field } from "../../../dsl/interface/field.ts"
+import { validateResponse } from "../../../dsl/validateResponse"
+import { field } from "../../../dsl"
 
 describe("validateResponse 함수 검증", () => {
     describe("field를 사용하지 않는 경우", () => {
